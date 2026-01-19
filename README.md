@@ -198,7 +198,7 @@ hugo mod tidy
 - **博客**: https://blog.961110.xyz:10010
 - **配置仓库**: https://github.com/jasonchio-cn/hugo-theme-stack-starter
 - **内容仓库**: https://github.com/jasonchio-cn/ObsidianVault
-- **deployed 仓库**: https://github.com/jasonchio-cn/jasonchio-cn.github.io
+- **部署仓库**: https://github.com/jasonchio-cn/jasonchio-cn.github.io
 - **主题**: https://github.com/CaiJimmy/hugo-theme-stack
 
 ---
