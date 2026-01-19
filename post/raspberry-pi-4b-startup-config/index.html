@@ -1,0 +1,199 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="树莓派4B启动配置教程，包含系统镜像选择及基础配置"><title>树莓派4B启动配置</title><link rel=canonical href=https://blog.961110.xyz:10010/post/raspberry-pi-4b-startup-config/><link rel=stylesheet href=/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="树莓派4B启动配置"><meta property='og:description' content="树莓派4B启动配置教程，包含系统镜像选择及基础配置"><meta property='og:url' content='https://blog.961110.xyz:10010/post/raspberry-pi-4b-startup-config/'><meta property='og:site_name' content='积跬步行千里'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2021-10-10T11:00:00+08:00'><meta property='article:modified_time' content='2022-02-04T11:30:00+08:00'><meta name=twitter:title content="树莓派4B启动配置"><meta name=twitter:description content="树莓派4B启动配置教程，包含系统镜像选择及基础配置"><script async src="https://www.googletagmanager.com/gtag/js?id=G-YQ9F51F77Q"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-YQ9F51F77Q")}</script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=https://image.961110.xyz:10010/i/2025/03/avatar-%e8%87%aa%e5%ae%9a%e4%b9%89-1.webp width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>积跬步行千里</a></h1><h2 class=site-description>JasonChio</h2></div></header><ol class=menu-social><li><a href=https://space.bilibili.com/30240401 target=_blank title=Bilibili rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li><li><a href=mailto:zyb389120217@gmail.com target=_blank title=Email rel=me><svg class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M21 14l-3-3h-7a1 1 0 01-1-1V4a1 1 0 011-1h9a1 1 0 011 1v10"/><path d="M14 15v2a1 1 0 01-1 1H6l-3 3V11a1 1 0 011-1h2"/></svg></a></li><li><a href=https://github.com/jasonchio-cn target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#镜像及工具>镜像及工具</a><ol><li><a href=#系统镜像>系统镜像</a><ol><li><a href=#raspberry-pi-os>Raspberry Pi OS</a></li></ol></li><li><a href=#sd卡格式化工具>SD卡格式化工具</a></li><li><a href=#写镜像工具>写镜像工具</a></li><li><a href=#远程桌面工具>远程桌面工具</a><ol><li></li></ol></li></ol></li><li><a href=#刷写系统>刷写系统</a><ol><li><a href=#下载镜像>下载镜像</a></li><li><a href=#格式化sd卡>格式化SD卡</a></li><li><a href=#刷写镜像>刷写镜像</a></li></ol></li><li><a href=#启动>启动</a><ol><li><a href=#准备工作>准备工作</a><ol><li><a href=#开启ssh>开启ssh</a></li><li><a href=#通过网线共享电脑的网络>通过网线共享电脑的网络</a></li><li><a href=#通过配置wifi上网>通过配置WiFi上网</a></li><li><a href=#连接风扇>连接风扇</a></li></ol></li><li><a href=#通电>通电</a><ol><li><a href=#状态检查>状态检查</a></li><li><a href=#通过网线联网查看树莓派raspberry-4b的ip>通过网线联网，查看树莓派Raspberry 4B的IP</a></li><li><a href=#通过配置wifi上网查看树莓派raspberry-4b的ip>通过配置WiFi上网，查看树莓派Raspberry 4B的IP</a></li></ol></li><li><a href=#ssh连接>ssh连接</a></li><li><a href=#vnc连接>VNC连接</a><ol><li><a href=#开启vnc>开启VNC</a></li><li><a href=#使用vnc连接>使用VNC连接</a></li></ol></li><li><a href=#使用微软远程桌面连接>使用微软远程桌面连接</a><ol><li><a href=#安装依赖包>安装依赖包</a></li></ol></li><li><a href=#连接>连接</a></li><li><a href=#安装中文字体>安装中文字体</a></li><li><a href=#安装虚拟键盘>安装虚拟键盘</a></li></ol></li><li><a href=#更换软件源>更换软件源</a><ol><li><a href=#debian系统源>Debian系统源</a></li><li><a href=#树莓派软件源>树莓派软件源</a></li><li><a href=#刷新软件包信息>刷新软件包信息</a></li></ol></li><li><a href=#基本信息>基本信息</a><ol><li><a href=#版本信息>版本信息</a></li><li><a href=#重要部件信息>重要部件信息</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/post/raspberry-pi-4b-startup-config/>树莓派4B启动配置</a></h2><h3 class=article-subtitle>树莓派4B启动配置教程，包含系统镜像选择及基础配置</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2021-10-10T11:00:00+08:00>2021-10-10</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><h2 id=镜像及工具>镜像及工具</h2><h3 id=系统镜像>系统镜像</h3><h4 id=raspberry-pi-os>Raspberry Pi OS</h4><p>官方镜像，基于Debian的一个发行版，针对树莓派做了优化。</p><p>一共提供了三个版本，镜像大小逐个递减。</p><ol><li>Raspberry Pi OS with desktop and recommended software：有图形界面，内置各种软件，比如博主的世界、Python、游戏等；</li><li>Raspberry Pi OS with desktop：有图形界面、浏览器，没有一些乱七八糟的软件；</li><li>Raspberry Pi OS Lite：无图形界面，有核心依赖，比如Python等。</li></ol><p>需要图形化界面的更推荐Raspberry Pi OS with desktop这个版本，不大不小。不过<strong>官网默认提供的是32bit的版本</strong>，树莓派RaspBerry4B的CPU是博通的BCM2711，一颗ARM Cortex-A72架构的64位处理器，所以使用64位系统才能更好释放性能。</p><blockquote><p><a class=link href=https://www.raspberrypi.com/software/operating-systems/ target=_blank rel=noopener>32bit镜像官网链接</a></p><p><a class=link href=https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-64-bit target=_blank rel=noopener>64bit镜像官网链接</a></p><p><a class=link href=https://www.raspberrypi.com/software/operating-systems/ target=_blank rel=noopener>镜像的官方介绍及各个版本</a></p></blockquote><h3 id=sd卡格式化工具>SD卡格式化工具</h3><p>SD Card Formatter</p><p><a class=link href=https://www.sdcard.org/downloads/formatter/sd-memory-card-formatter-for-windows-download/ target=_blank rel=noopener>官网下载链接</a></p><h3 id=写镜像工具>写镜像工具</h3><p>Win32DiskImager</p><p><a class=link href=https://sourceforge.net/projects/win32diskimager/files/latest/download target=_blank rel=noopener>官方下载链接</a></p><h3 id=远程桌面工具>远程桌面工具</h3><h5 id=vnc-viewer>VNC Viewer</h5><p><a class=link href=https://www.realvnc.com/en/connect/download/viewer/ target=_blank rel=noopener>官方下载链接</a></p><h2 id=刷写系统>刷写系统</h2><h3 id=下载镜像>下载镜像</h3><p>此处博主下载的是64位的最新镜像，官方文件名为：2021-05-07-raspios-buster-arm64</p><p>下载之后可以Windows 10终端里输入下面命令来计算SHA256进行完整性校验。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>certutil -hashfile 镜像存放路径<span class=se>\2</span>021-05-07-raspios-buster-arm64.zip SHA256
+</span></span></code></pre></td></tr></table></div></div><p>BTW，可选哈希算法参数有MD2 MD4 MD5 SHA1 SHA256 SHA384 SHA512</p><p><img src=https://images.961110.xyz:5001/i/2021/10/19/Raspberry-Pi-OS-with-desktop-.png alt=image-20211016201407578 style=zoom:50%><img src=https://images.961110.xyz:5001/i/2021/10/19/Raspberry-Pi-OS-with-desktop-dc4e0e6197208ff1.png alt=image-20211016201252081 style=zoom:50%></p><p>两个不同的下载通道都可以看到SHA256的值，最好校验一下。</p><p>校验无误后，解压得到<code>.img</code>镜像文件，待会写到SD卡中。</p><h3 id=格式化sd卡>格式化SD卡</h3><p>选择好SD卡对应的盘符，选择Quick format，点击右下角Format，稍等片刻即可。<strong>注意不要选择错了盘符，否则后果不堪设想。</strong></p><p><img src=https://images.961110.xyz:5001/i/2021/10/19/SD-Card-Formatter.png alt=image-20211016201935243 style=zoom:67%><img src=https://images.961110.xyz:5001/i/2021/10/19/SD.png alt=image-20211016202211668 style=zoom:67%></p><h3 id=刷写镜像>刷写镜像</h3><p>选择刚刚解压出来的镜像文件，选择好盘符，然后点击写入即可，完成速度取决于SD卡及读卡器的速度。</p><p><img src=https://images.961110.xyz:5001/i/2021/10/19/f28e57496b9b60234c05963587aebae3.png alt=image-20211016202444369 style=zoom:67%><img src=https://images.961110.xyz:5001/i/2021/10/19/1163840ac01b2da689eb0dc2686f4eb3.png alt=image-20211016203816344 style=zoom:67%></p><h2 id=启动>启动</h2><h3 id=准备工作>准备工作</h3><h4 id=开启ssh>开启ssh</h4><p>写入镜像后，会有一个boot分区，在boot分区下新建一个<strong>删掉格式后缀</strong>的名为ssh的<strong>文件</strong>，以便启动后使用ssh连接树莓派。</p><h4 id=通过网线共享电脑的网络>通过网线共享电脑的网络</h4><blockquote><p>设置&ndash;>状态&ndash;>高级网络设置：更改适配器选项&ndash;>选择电脑联网的适配器&ndash;>右键选择属性，点击共享&ndash;>打开下图中的选项&ndash;>选择树莓派要连接的适配器&ndash;>确定</p></blockquote><img src=https://images.961110.xyz:5001/i/2021/10/19/2d3ddc0a200c6e2f6386bbfe718cb969.png alt=image-20211017133126324 style=zoom:50%><p>此种方式的默认的网关IP是192.168.137.1，所以分配给树莓派的IP是192.168.137.XXX，具体查看方式见下文。</p><h4 id=通过配置wifi上网>通过配置WiFi上网</h4><p>在boot分区新建一个wpa_supplicant.conf文件，内容如下:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=nv>country</span><span class=o>=</span>CN
+</span></span><span class=line><span class=cl><span class=nv>ctrl_interface</span><span class=o>=</span><span class=nv>DIR</span><span class=o>=</span>/var/run/wpa_supplicant <span class=nv>GROUP</span><span class=o>=</span>netdev
+</span></span><span class=line><span class=cl><span class=nv>update_config</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>network</span><span class=o>={</span>
+</span></span><span class=line><span class=cl>       <span class=nv>ssid</span><span class=o>=</span><span class=s2>&#34;XXXXXXX&#34;</span>
+</span></span><span class=line><span class=cl>       <span class=nv>psk</span><span class=o>=</span><span class=s2>&#34;password&#34;</span>
+</span></span><span class=line><span class=cl>       <span class=nv>key_mgmt</span><span class=o>=</span>WPA-PSK
+</span></span><span class=line><span class=cl>       <span class=nv>priority</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>ssid</code>就是WIFI名，<code>psk</code>就是WiFi密码，<code>key_mgmt</code>就是WiFi的加密方式，一般在路由器管理界面的WiFi设置中可以看到。</p><p>和一般的不同，这里**<code>priority</code>值越大，优先级越大**。</p><h4 id=连接风扇>连接风扇</h4><img src=https://images.961110.xyz:5001/i/2021/10/19/4B-.jpg alt="树莓派4B 连接风扇" style=zoom:50%><p>树莓派4B的GPIO口外侧是偶数口，内侧是奇数口，如图示从左到右需要依次增大。风扇需要连接在第4和6号引脚上，正极（红线）连接在4号引脚，负极（黑线）连接在6号引脚。</p><h3 id=通电>通电</h3><h4 id=状态检查>状态检查</h4><p>插入SD卡，插入网线，连接电源自动开机：</p><ul><li>红灯常亮：未能检测到TF卡；</li><li>双灯常亮：未能检测到系统；</li><li>绿灯闪烁：系统运行正常。、</li></ul><p>等个几十秒进行下一步</p><h4 id=通过网线联网查看树莓派raspberry-4b的ip>通过网线联网，查看树莓派Raspberry 4B的IP</h4><p>打开cmd或其他shell工具，通过<code>arp -a</code>查看本机的arp表，找到接口为192.168.137.1下的内容</p><p>可以看到树莓派Raspberry 4B获得的IP: 192.168.137.XXX</p><h4 id=通过配置wifi上网查看树莓派raspberry-4b的ip>通过配置WiFi上网，查看树莓派Raspberry 4B的IP</h4><p>进入路由器后台，查看接入网络的设备列表，记录其IP即可。</p><p>此处博主通过Windows 10开启移动热点，树莓派连接上WIFI之后可以直接看到IP地址</p><img src=https://images.961110.xyz:5001/i/2021/10/21/Windows104a0509f4c0915e31.png alt=image-20211021162133259 style=zoom:50%>
+<img src=https://images.961110.xyz:5001/i/2021/10/21/Windows10851671f235bebad9.png alt=image-20211021162217862 style=zoom:50%><h3 id=ssh连接>ssh连接</h3><p>获取IP后，直接 <code>ssh pi@IP</code> 即可</p><p>密码是 raspberry</p><h3 id=vnc连接>VNC连接</h3><h4 id=开启vnc>开启VNC</h4><p>使用ssh登录之后，输入<code>sudo raspi-config</code>进行配置</p><p><img src=https://images.961110.xyz:5001/i/2021/10/21/config.png alt=image-20211021162433139 style=zoom:40%><img src=https://images.961110.xyz:5001/i/2021/10/21/VNC.png alt=image-20211021161625685 style=zoom:45%></p><p>此种方式是<strong>开机自动开启</strong>VNC服务的。</p><p>在终端输入<code>vncserver</code>开启NVC服务的方式，每次启动必须手动执行才可以。</p><h4 id=使用vnc连接>使用VNC连接</h4><img src=https://images.961110.xyz:5001/i/2021/10/21/VNC7439f5bdc8e20c2c.png alt=image-20211021162832932 style=zoom:50%><p>直接输入树莓派的IP地址即可。</p><h3 id=使用微软远程桌面连接>使用微软远程桌面连接</h3><h4 id=安装依赖包>安装依赖包</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 安装 xrdp</span>
+</span></span><span class=line><span class=cl>sudo apt-get install xrdp
+</span></span><span class=line><span class=cl><span class=c1># 启动xrdp</span>
+</span></span><span class=line><span class=cl>sudo /etc/init.d/xrdp start
+</span></span><span class=line><span class=cl><span class=c1># 将Xrdp服务添加到系统默认启动服务中</span>
+</span></span><span class=line><span class=cl>sudo update-rc.d xrdp defaults
+</span></span></code></pre></td></tr></table></div></div><h3 id=连接>连接</h3><p>打开Windows远程桌面，输入树莓派4B的IP，连接即可。默认用户名：pi，默认密码：raspberry。</p><h3 id=安装中文字体>安装中文字体</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt-get -y install fonts-wqy-zenhei
+</span></span></code></pre></td></tr></table></div></div><h3 id=安装虚拟键盘>安装虚拟键盘</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt-get install matchbox-keyboard
+</span></span></code></pre></td></tr></table></div></div><p>安装之后可以在附件中找到快捷方式。</p><img src=https://images.961110.xyz:5001/i/2021/10/23/fc94eb07ca8e02d7fc2d1b1e7170f0fe.png alt=image-20211023170143928 style=zoom:50%><h2 id=更换软件源>更换软件源</h2><h3 id=debian系统源>Debian系统源</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>cp /etc/apt/sources.list /etc/apt/sources.list.bak
+</span></span></code></pre></td></tr></table></div></div><p>清空原文件中的内容，填入清华大学的源</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+</span></span><span class=line><span class=cl>deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster main contrib non-free
+</span></span><span class=line><span class=cl># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster main contrib non-free
+</span></span><span class=line><span class=cl>deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free
+</span></span><span class=line><span class=cl># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-updates main contrib non-free
+</span></span><span class=line><span class=cl>deb https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-backports main contrib non-free
+</span></span><span class=line><span class=cl># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ buster-backports main contrib non-free
+</span></span><span class=line><span class=cl>deb https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free
+</span></span><span class=line><span class=cl># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security buster/updates main contrib non-free
+</span></span></code></pre></td></tr></table></div></div><h3 id=树莓派软件源>树莓派软件源</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>cp /etc/apt/sources.list.d/raspi.list /etc/apt/sources.list.d/raspi.list.bak
+</span></span></code></pre></td></tr></table></div></div><p>清空原文件中的内容，填入清华大学的源</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>deb http://mirrors.tuna.tsinghua.edu.cn/raspberrypi/ buster main ui
+</span></span></code></pre></td></tr></table></div></div><h3 id=刷新软件包信息>刷新软件包信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt update
+</span></span></code></pre></td></tr></table></div></div><h2 id=基本信息>基本信息</h2><h3 id=版本信息>版本信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>pi@raspberrypi:~ $ uname -a
+</span></span><span class=line><span class=cl>Linux raspberrypi 5.10.63-v8+ <span class=c1>#1459 SMP PREEMPT Wed Oct 6 16:42:49 BST 2021 aarch64 GNU/Linux</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>pi@raspberrypi:~ $ cat /proc/version
+</span></span><span class=line><span class=cl>Linux version 5.10.63-v8+ <span class=o>(</span>dom@buildbot<span class=o>)</span> <span class=o>(</span>aarch64-linux-gnu-gcc-8 <span class=o>(</span>Ubuntu/Linaro 8.4.0-3ubuntu1<span class=o>)</span> 8.4.0, GNU ld <span class=o>(</span>GNU Binutils <span class=k>for</span> Ubuntu<span class=o>)</span> 2.34<span class=o>)</span> <span class=c1>#1459 SMP PREEMPT Wed Oct 6 16:42:49 BST 2021</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>pi@raspberrypi:~ $ lsb_release -a
+</span></span><span class=line><span class=cl>No LSB modules are available.
+</span></span><span class=line><span class=cl>Distributor ID: Debian
+</span></span><span class=line><span class=cl>Description:    Debian GNU/Linux <span class=m>10</span> <span class=o>(</span>buster<span class=o>)</span>
+</span></span><span class=line><span class=cl>Release:        <span class=m>10</span>
+</span></span><span class=line><span class=cl>Codename:       buster
+</span></span></code></pre></td></tr></table></div></div><h3 id=重要部件信息>重要部件信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>pi@raspberrypi:~ $ lscpu
+</span></span><span class=line><span class=cl>Architecture:        aarch64
+</span></span><span class=line><span class=cl>Byte Order:          Little Endian
+</span></span><span class=line><span class=cl>CPU<span class=o>(</span>s<span class=o>)</span>:              <span class=m>4</span>
+</span></span><span class=line><span class=cl>On-line CPU<span class=o>(</span>s<span class=o>)</span> list: 0-3
+</span></span><span class=line><span class=cl>Thread<span class=o>(</span>s<span class=o>)</span> per core:  <span class=m>1</span>
+</span></span><span class=line><span class=cl>Core<span class=o>(</span>s<span class=o>)</span> per socket:  <span class=m>4</span>
+</span></span><span class=line><span class=cl>Socket<span class=o>(</span>s<span class=o>)</span>:           <span class=m>1</span>
+</span></span><span class=line><span class=cl>Vendor ID:           ARM
+</span></span><span class=line><span class=cl>Model:               <span class=m>3</span>
+</span></span><span class=line><span class=cl>Model name:          Cortex-A72
+</span></span><span class=line><span class=cl>Stepping:            r0p3
+</span></span><span class=line><span class=cl>CPU max MHz:         1500.0000
+</span></span><span class=line><span class=cl>CPU min MHz:         600.0000
+</span></span><span class=line><span class=cl>BogoMIPS:            108.00
+</span></span><span class=line><span class=cl>Flags:               fp asimd evtstrm crc32 cpuid
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>pi@raspberrypi:~ $ lsusb
+</span></span><span class=line><span class=cl>Bus <span class=m>002</span> Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+</span></span><span class=line><span class=cl>Bus <span class=m>001</span> Device 002: ID 2109:3431 VIA Labs, Inc. Hub
+</span></span><span class=line><span class=cl>Bus <span class=m>001</span> Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>pi@raspberrypi:~ $ sudo ifconfig -a
+</span></span><span class=line><span class=cl>eth0: <span class=nv>flags</span><span class=o>=</span>4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu <span class=m>1500</span>
+</span></span><span class=line><span class=cl>        ether e4:5f:01:64:3c:12  txqueuelen <span class=m>1000</span>  <span class=o>(</span>Ethernet<span class=o>)</span>
+</span></span><span class=line><span class=cl>        RX packets <span class=m>0</span>  bytes <span class=m>0</span> <span class=o>(</span>0.0 B<span class=o>)</span>
+</span></span><span class=line><span class=cl>        RX errors <span class=m>0</span>  dropped <span class=m>0</span>  overruns <span class=m>0</span>  frame <span class=m>0</span>
+</span></span><span class=line><span class=cl>        TX packets <span class=m>0</span>  bytes <span class=m>0</span> <span class=o>(</span>0.0 B<span class=o>)</span>
+</span></span><span class=line><span class=cl>        TX errors <span class=m>0</span>  dropped <span class=m>0</span> overruns <span class=m>0</span>  carrier <span class=m>0</span>  collisions <span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>lo: <span class=nv>flags</span><span class=o>=</span>73&lt;UP,LOOPBACK,RUNNING&gt;  mtu <span class=m>65536</span>
+</span></span><span class=line><span class=cl>        inet 127.0.0.1  netmask 255.0.0.0
+</span></span><span class=line><span class=cl>        inet6 ::1  prefixlen <span class=m>128</span>  scopeid 0x10&lt;host&gt;
+</span></span><span class=line><span class=cl>        loop  txqueuelen <span class=m>1000</span>  <span class=o>(</span>Local Loopback<span class=o>)</span>
+</span></span><span class=line><span class=cl>        RX packets <span class=m>5</span>  bytes <span class=m>284</span> <span class=o>(</span>284.0 B<span class=o>)</span>
+</span></span><span class=line><span class=cl>        RX errors <span class=m>0</span>  dropped <span class=m>0</span>  overruns <span class=m>0</span>  frame <span class=m>0</span>
+</span></span><span class=line><span class=cl>        TX packets <span class=m>5</span>  bytes <span class=m>284</span> <span class=o>(</span>284.0 B<span class=o>)</span>
+</span></span><span class=line><span class=cl>        TX errors <span class=m>0</span>  dropped <span class=m>0</span> overruns <span class=m>0</span>  carrier <span class=m>0</span>  collisions <span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>wlan0: <span class=nv>flags</span><span class=o>=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu <span class=m>1500</span>
+</span></span><span class=line><span class=cl>        inet 192.168.137.208  netmask 255.255.255.0  broadcast 192.168.137.255
+</span></span><span class=line><span class=cl>        inet6 fe80::9ac0:acda:640d:1cf0  prefixlen <span class=m>64</span>  scopeid 0x20&lt;link&gt;
+</span></span><span class=line><span class=cl>        ether e4:5f:01:64:3c:14  txqueuelen <span class=m>1000</span>  <span class=o>(</span>Ethernet<span class=o>)</span>
+</span></span><span class=line><span class=cl>        RX packets <span class=m>38498</span>  bytes <span class=m>48445286</span> <span class=o>(</span>46.2 MiB<span class=o>)</span>
+</span></span><span class=line><span class=cl>        RX errors <span class=m>0</span>  dropped <span class=m>0</span>  overruns <span class=m>0</span>  frame <span class=m>0</span>
+</span></span><span class=line><span class=cl>        TX packets <span class=m>21303</span>  bytes <span class=m>3907714</span> <span class=o>(</span>3.7 MiB<span class=o>)</span>
+</span></span><span class=line><span class=cl>        TX errors <span class=m>0</span>  dropped <span class=m>0</span> overruns <span class=m>0</span>  carrier <span class=m>0</span>  collisions <span class=m>0</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 2022-02-04 11:30:00</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=[".main-article",".widget--toc"];e.forEach(e=>{const t=document.querySelector(e);t&&renderMathInElement(t,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})})</script></article><script src=//cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js></script><div id=tcomment></div><style>.twikoo{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}:root[data-scheme=dark]{--twikoo-body-text-color-main:rgba(255, 255, 255, 0.9);--twikoo-body-text-color:rgba(255, 255, 255, 0.7)}.twikoo .el-input-group__prepend,.twikoo .tk-action-icon,.twikoo .tk-submit-action-icon,.twikoo .tk-time,.twikoo .tk-comments-no,.twikoo .tk-comments-count{color:var(--twikoo-body-text-color)}.twikoo .el-input__inner,.twikoo .el-textarea__inner,.twikoo .tk-preview-container,.twikoo .tk-content,.twikoo .tk-nick,.twikoo .tk-send,.twikoo .tk-comments-no,.twikoo .el-input__count,.twikoo .tk-submit-action-icon{color:var(--twikoo-body-text-color-main)!important}.twikoo .el-button{color:var(--twikoo-body-text-color)!important}.twikoo .el-input__count{color:var(--twikoo-body-text-color)!important}.OwO .OwO-body{background-color:var(--body-background)!important;color:var(--body-text-color)!important}</style><script>twikoo.init({envId:"https://comment.961110.xyz:10010",el:"#tcomment",lang:"zh-CN"})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 JasonChio</section><section class=powerby>间歇性更新 持续性尝试更新<br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

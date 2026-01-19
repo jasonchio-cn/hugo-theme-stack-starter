@@ -1,0 +1,246 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Ubuntu 20.04 或 Centos 7.4 安装 Transmission 下载器，相关技术教程和文档"><title>Ubuntu 20.04 或 Centos 7.4 安装 Transmission 下载器</title><link rel=canonical href=https://blog.961110.xyz:10010/post/ubuntu-2004-%E6%88%96-centos-74-%E5%AE%89%E8%A3%85-transmission-%E4%B8%8B%E8%BD%BD%E5%99%A8/><link rel=stylesheet href=/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="Ubuntu 20.04 或 Centos 7.4 安装 Transmission 下载器"><meta property='og:description' content="Ubuntu 20.04 或 Centos 7.4 安装 Transmission 下载器，相关技术教程和文档"><meta property='og:url' content='https://blog.961110.xyz:10010/post/ubuntu-2004-%E6%88%96-centos-74-%E5%AE%89%E8%A3%85-transmission-%E4%B8%8B%E8%BD%BD%E5%99%A8/'><meta property='og:site_name' content='积跬步行千里'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2022-01-17T22:16:00+08:00'><meta property='article:modified_time' content='2022-05-14T19:48:00+08:00'><meta name=twitter:title content="Ubuntu 20.04 或 Centos 7.4 安装 Transmission 下载器"><meta name=twitter:description content="Ubuntu 20.04 或 Centos 7.4 安装 Transmission 下载器，相关技术教程和文档"><script async src="https://www.googletagmanager.com/gtag/js?id=G-YQ9F51F77Q"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-YQ9F51F77Q")}</script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=https://image.961110.xyz:10010/i/2025/03/avatar-%e8%87%aa%e5%ae%9a%e4%b9%89-1.webp width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>积跬步行千里</a></h1><h2 class=site-description>JasonChio</h2></div></header><ol class=menu-social><li><a href=https://space.bilibili.com/30240401 target=_blank title=Bilibili rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li><li><a href=mailto:zyb389120217@gmail.com target=_blank title=Email rel=me><svg class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M21 14l-3-3h-7a1 1 0 01-1-1V4a1 1 0 011-1h9a1 1 0 011 1v10"/><path d="M14 15v2a1 1 0 01-1 1H6l-3 3V11a1 1 0 011-1h2"/></svg></a></li><li><a href=https://github.com/jasonchio-cn target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#更新>更新</a><ol><li><a href=#2022-05-14>2022-05-14</a></li><li><a href=#2022-05-13>2022-05-13</a></li></ol></li><li><a href=#背景>背景</a></li><li><a href=#安装与配置>安装与配置</a><ol><li><a href=#直接用包管理软件安装就可以>直接用包管理软件安装就可以</a></li><li><a href=#配置>配置</a></li><li><a href=#权限>权限</a></li><li><a href=#开机自启>开机自启</a></li><li><a href=#centos-编译安装>centos 编译安装</a><ol><li><a href=#准备环境>准备环境</a></li><li><a href=#下载源码包>下载源码包</a></li><li><a href=#编译安装>编译安装</a></li><li><a href=#设定-systemd-transmission-service>设定 systemd Transmission-service</a></li><li><a href=#创建默认配置>创建默认配置</a></li><li><a href=#修改配置>修改配置</a></li><li><a href=#防火墙放行>防火墙放行</a></li></ol></li></ol></li><li><a href=#美化>美化</a></li><li><a href=#参考链接>参考链接</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/post/ubuntu-2004-%E6%88%96-centos-74-%E5%AE%89%E8%A3%85-transmission-%E4%B8%8B%E8%BD%BD%E5%99%A8/>Ubuntu 20.04 或 Centos 7.4 安装 Transmission 下载器</a></h2><h3 class=article-subtitle>Ubuntu 20.04 或 Centos 7.4 安装 Transmission 下载器，相关技术教程和文档</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2022-01-17T22:16:00+08:00>2022-01-17</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 2 分钟</time></div></footer></div></header><section class=article-content><h2 id=更新>更新</h2><h3 id=2022-05-14>2022-05-14</h3><p>增加 centos 7.4 下手动编译的安装方法，可以解决 yum 安装导致的权限问题。</p><h3 id=2022-05-13>2022-05-13</h3><p>增加 centos 7.4 下安装方法</p><h2 id=背景>背景</h2><p>之前在群晖里一直用 Transmission 玩儿 PT，所以想在树莓派上也装一个玩儿玩儿。</p><blockquote><p><a class=link href=https://transmissionbt.com/ target=_blank rel=noopener>Transmission</a>是一种BitTorrent客户端，特点是一个跨平台的后端和其上的简洁的用户界面。Transmission以MIT许可证和GNU通用公共许可证双许可证授权，因此是一款自由软件。挂PT的利器！</p></blockquote><h2 id=安装与配置>安装与配置</h2><h3 id=直接用包管理软件安装就可以>直接用包管理软件安装就可以</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Ubuntu 20.04</span>
+</span></span><span class=line><span class=cl>sudo apt-get install -y transmission-daemon
+</span></span><span class=line><span class=cl><span class=c1># Centos 7.4</span>
+</span></span><span class=line><span class=cl>sudo yum install -y transmission-daemon
+</span></span></code></pre></td></tr></table></div></div><h3 id=配置>配置</h3><p>首先需要停止 transmission 的服务，不然会被修改的配置会被还原</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 先启动，会创建默认配置文件</span>
+</span></span><span class=line><span class=cl>sudo systemctl start transmission-daemon.service
+</span></span><span class=line><span class=cl>sudo systemctl stop transmission-daemon.service
+</span></span></code></pre></td></tr></table></div></div><p>修改 transmission 的配置文件</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Ubuntu 20.04</span>
+</span></span><span class=line><span class=cl>sudo vim /etc/transmission-daemon/settings.json
+</span></span><span class=line><span class=cl><span class=c1># Centos 7.4</span>
+</span></span><span class=line><span class=cl>sudo vim /var/lib/transmission/.config/transmission-daemon/settings.json
+</span></span></code></pre></td></tr></table></div></div><p>需要修改的地方已经做好了备注</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;alt-speed-down&#34;</span><span class=p>:</span> <span class=mi>50</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;alt-speed-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;alt-speed-time-begin&#34;</span><span class=p>:</span> <span class=mi>540</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;alt-speed-time-day&#34;</span><span class=p>:</span> <span class=mi>127</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;alt-speed-time-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;alt-speed-time-end&#34;</span><span class=p>:</span> <span class=mi>1020</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;alt-speed-up&#34;</span><span class=p>:</span> <span class=mi>50</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;bind-address-ipv4&#34;</span><span class=p>:</span> <span class=s2>&#34;0.0.0.0&#34;</span><span class=p>,</span>  <span class=err>#开启IPV4地址绑定</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;bind-address-ipv6&#34;</span><span class=p>:</span> <span class=s2>&#34;::&#34;</span><span class=p>,</span> <span class=err>#开启IPV6地址绑定</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;blocklist-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>  <span class=err>#启用黑名单</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;blocklist-url&#34;</span><span class=p>:</span> <span class=s2>&#34;http://www.example.com/blocklist&#34;</span><span class=p>,</span> <span class=err>#黑名单地址</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;cache-size-mb&#34;</span><span class=p>:</span> <span class=mi>4</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;dht-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>  <span class=err>#DTH启用，这里我们要关闭</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;download-dir&#34;</span><span class=p>:</span> <span class=s2>&#34;/home/jason/Downloads/PT&#34;</span><span class=p>,</span>  <span class=err>#默认下载目录</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;download-queue-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;download-queue-size&#34;</span><span class=p>:</span> <span class=mi>5</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;encryption&#34;</span><span class=p>:</span> <span class=mi>2</span><span class=p>,</span>  <span class=err>#修改为2</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;idle-seeding-limit&#34;</span><span class=p>:</span> <span class=mi>30</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;idle-seeding-limit-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;incomplete-dir&#34;</span><span class=p>:</span> <span class=s2>&#34;/var/lib/transmission/Downloads&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;incomplete-dir-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;lpd-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;message-level&#34;</span><span class=p>:</span> <span class=mi>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-congestion-algorithm&#34;</span><span class=p>:</span> <span class=s2>&#34;&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-id-ttl-hours&#34;</span><span class=p>:</span> <span class=mi>6</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-limit-global&#34;</span><span class=p>:</span> <span class=mi>200</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-limit-per-torrent&#34;</span><span class=p>:</span> <span class=mi>50</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-port&#34;</span><span class=p>:</span> <span class=mi>51413</span><span class=p>,</span> <span class=err>#端口</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-port-random-high&#34;</span><span class=p>:</span> <span class=mi>65535</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-port-random-low&#34;</span><span class=p>:</span> <span class=mi>49152</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-port-random-on-start&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;peer-socket-tos&#34;</span><span class=p>:</span> <span class=s2>&#34;default&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;pex-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;port-forwarding-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;preallocation&#34;</span><span class=p>:</span> <span class=mi>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;prefetch-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;queue-stalled-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;queue-stalled-minutes&#34;</span><span class=p>:</span> <span class=mi>30</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;ratio-limit&#34;</span><span class=p>:</span> <span class=mi>2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;ratio-limit-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rename-partial-files&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-authentication-required&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-bind-address&#34;</span><span class=p>:</span> <span class=s2>&#34;0.0.0.0&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-host-whitelist&#34;</span><span class=p>:</span> <span class=s2>&#34;&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-host-whitelist-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-password&#34;</span><span class=p>:</span>  <span class=p>,</span><span class=err>#密码，编辑的时候输入明文密码，保持之后，自动变为加密的</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-port&#34;</span><span class=p>:</span> <span class=mi>9091</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-url&#34;</span><span class=p>:</span> <span class=s2>&#34;/transmission/&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-username&#34;</span><span class=p>:</span> <span class=s2>&#34;jason&#34;</span><span class=p>,</span>  <span class=err>#用户名</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rpc-whitelist&#34;</span><span class=p>:</span> <span class=s2>&#34;*&#34;</span><span class=p>,</span> <span class=err>#白名单IP,多个IP用‘,&#39;分隔,</span> <span class=nt>&#34;*&#34;</span><span class=err>表示允许所有</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;rpc-whitelist-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>  <span class=err>#是否启用白名单，如果需要可以修改为true</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;scrape-paused-torrents-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;script-torrent-done-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;script-torrent-done-filename&#34;</span><span class=p>:</span> <span class=s2>&#34;&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;seed-queue-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;seed-queue-size&#34;</span><span class=p>:</span> <span class=mi>10</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;speed-limit-down&#34;</span><span class=p>:</span> <span class=mi>100</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;speed-limit-down-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;speed-limit-up&#34;</span><span class=p>:</span> <span class=mi>100</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;speed-limit-up-enabled&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;start-added-torrents&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;trash-original-torrent-files&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;umask&#34;</span><span class=p>:</span> <span class=mi>18</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;upload-slots-per-torrent&#34;</span><span class=p>:</span> <span class=mi>14</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;utp-enabled&#34;</span><span class=p>:</span> <span class=kc>true</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>使用 yum 安装 transmission 时，下载目录不能指定到 <code>/home/user</code> 目录下，会有权限不足的问题，建议按照上面的默认选项设置。</p></blockquote><h3 id=权限>权限</h3><p>把 transmission 的下载文件夹修改权限</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo chmod <span class=m>777</span> &lt;文件夹&gt;
+</span></span></code></pre></td></tr></table></div></div><h3 id=开机自启>开机自启</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo systemctl <span class=nb>enable</span> transmission-daemon.service
+</span></span></code></pre></td></tr></table></div></div><h3 id=centos-编译安装>centos 编译安装</h3><h4 id=准备环境>准备环境</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo yum update
+</span></span><span class=line><span class=cl>sudo yum groupinstall -y <span class=s1>&#39;development tools&#39;</span>
+</span></span><span class=line><span class=cl>sudo yum -y install gcc gcc-c++ m4 make automake libtool gettext openssl-devel libcurl-devel libevent-devel intltool gtk3-devel
+</span></span></code></pre></td></tr></table></div></div><h4 id=下载源码包>下载源码包</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>wget https://github.com/transmission/transmission/releases/download/3.00/transmission-3.00.tar.xz
+</span></span><span class=line><span class=cl>tar -xf transmission-3.00.tar.xz
+</span></span><span class=line><span class=cl><span class=nb>cd</span> transmission-3.00
+</span></span></code></pre></td></tr></table></div></div><h4 id=编译安装>编译安装</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>./configure
+</span></span><span class=line><span class=cl>make
+</span></span><span class=line><span class=cl>sudo make install
+</span></span></code></pre></td></tr></table></div></div><h4 id=设定-systemd-transmission-service>设定 systemd Transmission-service</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo vim /etc/systemd/system/transmission.service
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=o>[</span>Unit<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>Description</span><span class=o>=</span>Transmission BitTorrent Daemon
+</span></span><span class=line><span class=cl><span class=nv>After</span><span class=o>=</span>network.target
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>Service<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>User</span><span class=o>=</span>root
+</span></span><span class=line><span class=cl><span class=nv>LimitNOFILE</span><span class=o>=</span><span class=m>100000</span>
+</span></span><span class=line><span class=cl><span class=nv>ExecStart</span><span class=o>=</span>/usr/local/bin/transmission-daemon -f --log-error -g /usr/local/share/transmission
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>Install<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>WantedBy</span><span class=o>=</span>multi-user.target
+</span></span></code></pre></td></tr></table></div></div><h4 id=创建默认配置>创建默认配置</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo systemctl daemon-reload
+</span></span><span class=line><span class=cl>sudo systemctl <span class=nb>enable</span> transmission.service
+</span></span><span class=line><span class=cl>sudo systemctl start transmission.service
+</span></span><span class=line><span class=cl>sudo systemctl stop transmission.service
+</span></span></code></pre></td></tr></table></div></div><h4 id=修改配置>修改配置</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo vim /usr/local/share/transmission/settings.json
+</span></span></code></pre></td></tr></table></div></div><p>具体配置参照上面的内容</p><p>重新启动</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo systemctl start transmission.service
+</span></span></code></pre></td></tr></table></div></div><h4 id=防火墙放行>防火墙放行</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo firewall-cmd --permanent --add-port<span class=o>=</span>9091/tcp
+</span></span><span class=line><span class=cl>sudo firewall-cmd --permanent --add-port<span class=o>=</span>56789/tcp
+</span></span><span class=line><span class=cl>sudo firewall-cmd --permanent --add-port<span class=o>=</span>56789/udp
+</span></span></code></pre></td></tr></table></div></div><p>重启防火墙</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo firewall-cmd --reload
+</span></span></code></pre></td></tr></table></div></div><h2 id=美化>美化</h2><p>原版的界面很丑，美化的方法如下，是大佬自定义的一套 WebUI</p><p><a class=link href=https://github.com/ronggang/transmission-web-control target=_blank rel=noopener>transmission-web-control</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>wget https://gitee.com/styf3501/transmission-web-control/raw/master/install-tr-control-gitee.sh
+</span></span><span class=line><span class=cl>sudo chmod +x install-tr-control-gitee.sh
+</span></span><span class=line><span class=cl>sudo bash ./install-tr-control-gitee.sh
+</span></span></code></pre></td></tr></table></div></div><h2 id=参考链接>参考链接</h2><ol><li><a class=link href=https://github.com/ronggang/transmission-web-control target=_blank rel=noopener>https://github.com/ronggang/transmission-web-control</a></li><li><a class=link href=https://jtxiao.com/main/posts/ubuntu-20.04-%E5%AE%89%E8%A3%85-transmission/ target=_blank rel=noopener>https://jtxiao.com/main/posts/ubuntu-20.04-%E5%AE%89%E8%A3%85-transmission/</a></li><li><a class=link href=https://wp.madjack.info/linux/transmission-2-92-centos-7.html target=_blank rel=noopener>Transmission 2.92 ~2.94 編譯 for Centos 7</a></li></ol></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 2022-05-14 19:48:00</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=[".main-article",".widget--toc"];e.forEach(e=>{const t=document.querySelector(e);t&&renderMathInElement(t,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})})</script></article><script src=//cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js></script><div id=tcomment></div><style>.twikoo{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}:root[data-scheme=dark]{--twikoo-body-text-color-main:rgba(255, 255, 255, 0.9);--twikoo-body-text-color:rgba(255, 255, 255, 0.7)}.twikoo .el-input-group__prepend,.twikoo .tk-action-icon,.twikoo .tk-submit-action-icon,.twikoo .tk-time,.twikoo .tk-comments-no,.twikoo .tk-comments-count{color:var(--twikoo-body-text-color)}.twikoo .el-input__inner,.twikoo .el-textarea__inner,.twikoo .tk-preview-container,.twikoo .tk-content,.twikoo .tk-nick,.twikoo .tk-send,.twikoo .tk-comments-no,.twikoo .el-input__count,.twikoo .tk-submit-action-icon{color:var(--twikoo-body-text-color-main)!important}.twikoo .el-button{color:var(--twikoo-body-text-color)!important}.twikoo .el-input__count{color:var(--twikoo-body-text-color)!important}.OwO .OwO-body{background-color:var(--body-background)!important;color:var(--body-text-color)!important}</style><script>twikoo.init({envId:"https://comment.961110.xyz:10010",el:"#tcomment",lang:"zh-CN"})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 JasonChio</section><section class=powerby>间歇性更新 持续性尝试更新<br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

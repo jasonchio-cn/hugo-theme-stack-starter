@@ -1,0 +1,554 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="编译Docker Engine源码的两种方法以及遇到的问题，相关技术教程和文档"><title>编译Docker Engine源码的两种方法以及遇到的问题</title><link rel=canonical href=https://blog.961110.xyz:10010/post/%E7%BC%96%E8%AF%91docker-engine%E6%BA%90%E7%A0%81%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/><link rel=stylesheet href=/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="编译Docker Engine源码的两种方法以及遇到的问题"><meta property='og:description' content="编译Docker Engine源码的两种方法以及遇到的问题，相关技术教程和文档"><meta property='og:url' content='https://blog.961110.xyz:10010/post/%E7%BC%96%E8%AF%91docker-engine%E6%BA%90%E7%A0%81%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/'><meta property='og:site_name' content='积跬步行千里'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2021-11-01T17:22:00+08:00'><meta property='article:modified_time' content='2021-12-11T20:33:00+08:00'><meta name=twitter:title content="编译Docker Engine源码的两种方法以及遇到的问题"><meta name=twitter:description content="编译Docker Engine源码的两种方法以及遇到的问题，相关技术教程和文档"><script async src="https://www.googletagmanager.com/gtag/js?id=G-YQ9F51F77Q"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-YQ9F51F77Q")}</script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=https://image.961110.xyz:10010/i/2025/03/avatar-%e8%87%aa%e5%ae%9a%e4%b9%89-1.webp width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>积跬步行千里</a></h1><h2 class=site-description>JasonChio</h2></div></header><ol class=menu-social><li><a href=https://space.bilibili.com/30240401 target=_blank title=Bilibili rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li><li><a href=mailto:zyb389120217@gmail.com target=_blank title=Email rel=me><svg class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M21 14l-3-3h-7a1 1 0 01-1-1V4a1 1 0 011-1h9a1 1 0 011 1v10"/><path d="M14 15v2a1 1 0 01-1 1H6l-3 3V11a1 1 0 011-1h2"/></svg></a></li><li><a href=https://github.com/jasonchio-cn target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#前情梗概>前情梗概</a></li><li><a href=#使用docker-dev镜像在容器中编译>使用docker-dev镜像在容器中编译</a><ol><li><a href=#安装docker>安装Docker</a></li><li><a href=#克隆moby仓库并切换到相应分支>克隆moby仓库并切换到相应分支</a></li><li><a href=#清空所有现有镜像和容器>清空所有现有镜像和容器</a></li><li><a href=#利用dockerfile构建docker-dev镜像>利用Dockerfile构建docker-dev镜像</a></li><li><a href=#docker-dev环境>docker-dev环境</a><ol><li><a href=#docker-version>docker version</a></li><li><a href=#go-env>go env</a></li></ol></li><li><a href=#编译docker-binary>编译docker binary</a><ol><li><a href=#编译>编译</a></li><li><a href=#安装>安装</a></li></ol></li><li><a href=#使用docker-dev镜像编译遇到的问题>使用docker-dev镜像编译遇到的问题</a><ol><li><a href=#从github克隆项目超时>从github克隆项目超时</a></li><li><a href=#go-install超时>go install超时</a></li><li><a href=#go无法找到mian模块>go无法找到mian模块</a></li><li><a href=#文件不完整>文件不完整</a></li><li><a href=#提示docker-client-cli项目已经搬迁>提示docker client CLI项目已经搬迁</a></li></ol></li></ol></li><li><a href=#在本地配置环境进行编译>在本地配置环境进行编译</a><ol><li><a href=#安装依赖的库>安装依赖的库</a></li><li><a href=#安装并配置go开发环境>安装并配置GO开发环境</a></li><li><a href=#下载源码>下载源码</a></li><li><a href=#编译-1>编译</a></li><li><a href=#替换docker启动文件>替换docker启动文件</a></li><li><a href=#重载及启动docker服务>重载及启动docker服务</a></li></ol></li><li><a href=#参考资料>参考资料</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/post/%E7%BC%96%E8%AF%91docker-engine%E6%BA%90%E7%A0%81%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/>编译Docker Engine源码的两种方法以及遇到的问题</a></h2><h3 class=article-subtitle>编译Docker Engine源码的两种方法以及遇到的问题，相关技术教程和文档</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2021-11-01T17:22:00+08:00>2021-11-01</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 8 分钟</time></div></footer></div></header><section class=article-content><h2 id=前情梗概>前情梗概</h2><p>Docker是前后端分离的架构，社区版本的Docker-CE前端部分由<a class=link href=https://github.com/docker/cli target=_blank rel=noopener>docker/cli: The Docker CLI</a>维护，后端部分由<a class=link href=https://github.com/moby/moby target=_blank rel=noopener>moby/moby: Moby Project</a>维护。从Docker 20.10 release版本开始，Docker Engine 和 Docker CLI单独从各自的项目编译。</p><p><img src=https://images.961110.xyz:5001/i/2021/10/30/docker-ce-overview.jpg loading=lazy alt=docker-ce-overview></p><p>这次Docker Engine源码编译选择的是19.03的版本，通过两种方式进行了尝试：</p><ol><li>通过官方指定方式，使用docker-dev镜像在容器中编译；</li><li>本地构建编译环境，在本机中编译。</li></ol><h2 id=使用docker-dev镜像在容器中编译>使用docker-dev镜像在容器中编译</h2><h3 id=安装docker>安装Docker</h3><p>因为是要在容器中编译，所以肯定先要安装好Docker，安装步骤可以参考<a class=link href=https://docs.docker.com/engine/install/ubuntu/ target=_blank rel=noopener>官方文档</a>或者其他教程贴。</p><h3 id=克隆moby仓库并切换到相应分支>克隆moby仓库并切换到相应分支</h3><p>克隆仓库</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git clone https://github.com/moby/moby.git
+</span></span></code></pre></td></tr></table></div></div><p>查看所有分支</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git branch -a
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>* <span class=o>(</span>HEAD detached at origin/19.03<span class=o>)</span>
+</span></span><span class=line><span class=cl>  19.03
+</span></span><span class=line><span class=cl>  master
+</span></span><span class=line><span class=cl>  remotes/origin/1.12.x
+</span></span><span class=line><span class=cl>  remotes/origin/1.13.x
+</span></span><span class=line><span class=cl>  remotes/origin/17.03.x
+</span></span><span class=line><span class=cl>  remotes/origin/17.04.x
+</span></span><span class=line><span class=cl>  remotes/origin/17.05.x
+</span></span><span class=line><span class=cl>  remotes/origin/19.03
+</span></span><span class=line><span class=cl>  remotes/origin/20.10
+</span></span><span class=line><span class=cl>  remotes/origin/HEAD -&gt; origin/master
+</span></span><span class=line><span class=cl>  remotes/origin/docs
+</span></span><span class=line><span class=cl>  remotes/origin/master
+</span></span></code></pre></td></tr></table></div></div><p>切换到对应分支</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git checkout remotes/origin/19.03
+</span></span></code></pre></td></tr></table></div></div><p>如果想要从当前分支另起一个分支</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git checkout -b dry-run-test
+</span></span><span class=line><span class=cl>$ git branch -a
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>* dry-run-test
+</span></span><span class=line><span class=cl>  master
+</span></span><span class=line><span class=cl>  remotes/origin/1.12.x
+</span></span><span class=line><span class=cl>  remotes/origin/1.13.x
+</span></span><span class=line><span class=cl>  remotes/origin/17.03.x
+</span></span><span class=line><span class=cl>  remotes/origin/17.04.x
+</span></span><span class=line><span class=cl>  remotes/origin/17.05.x
+</span></span><span class=line><span class=cl>  remotes/origin/19.03
+</span></span><span class=line><span class=cl>  remotes/origin/20.10
+</span></span><span class=line><span class=cl>  remotes/origin/HEAD -&gt; origin/master
+</span></span><span class=line><span class=cl>  remotes/origin/docs
+</span></span><span class=line><span class=cl>  remotes/origin/dry-run-test
+</span></span><span class=line><span class=cl>  remotes/origin/master
+</span></span></code></pre></td></tr></table></div></div><h3 id=清空所有现有镜像和容器>清空所有现有镜像和容器</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ docker ps -a
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>$ docker system prune -a
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>$ docker images
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>$ docker rmi -f <span class=k>$(</span>docker images -q -a -f <span class=nv>dangling</span><span class=o>=</span><span class=nb>true</span><span class=k>)</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=利用dockerfile构建docker-dev镜像>利用Dockerfile构建docker-dev镜像</h3><p>安装make工具</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt-get install make
+</span></span></code></pre></td></tr></table></div></div><p>在项目根目录直接输入</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ make <span class=nv>BIND_DIR</span><span class=o>=</span>. shell
+</span></span></code></pre></td></tr></table></div></div><p>在Makefile文件中对应执行的是</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-makefile data-lang=makefile><span class=line><span class=cl><span class=nf>build</span><span class=o>:</span> <span class=n>bundles</span>
+</span></span><span class=line><span class=cl>	<span class=k>$(</span>warning The docker client CLI has moved to github.com/docker/cli. For a dev-test cycle involving the CLI, run:<span class=si>${</span><span class=se>\n</span><span class=si>}</span> <span class=nv>DOCKER_CLI_PATH</span><span class=o>=</span>/host/path/to/cli/binary make shell <span class=si>${</span><span class=se>\n</span><span class=si>}</span> <span class=k>then</span> change the cli and compile into a binary at the same location.<span class=si>${</span><span class=se>\n</span><span class=si>}</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>	<span class=nv>DOCKER_BUILDKIT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>DOCKER_BUILDKIT</span><span class=si>}</span><span class=s2>&#34;</span> docker build --build-arg<span class=o>=</span>GO_VERSION <span class=si>${</span><span class=nv>BUILD_APT_MIRROR</span><span class=si>}</span> <span class=si>${</span><span class=nv>DOCKER_BUILD_ARGS</span><span class=si>}</span> <span class=si>${</span><span class=nv>DOCKER_BUILD_OPTS</span><span class=si>}</span> -t <span class=s2>&#34;</span><span class=k>$(</span>DOCKER_IMAGE<span class=k>)</span><span class=s2>&#34;</span> -f <span class=s2>&#34;</span><span class=k>$(</span>DOCKERFILE<span class=k>)</span><span class=s2>&#34;</span> .
+</span></span></code></pre></td></tr></table></div></div><p>大体意思是调用<code>docker build</code>依据设置的环境变量和的传入的参数遵从Dockerfile构建<code>docker-dev</code>镜像。</p><p>如果构成过程没有错误的话，终端输出的末尾应该会有如下的提示</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev  8/25<span class=o>]</span> RUN update-alternatives --set iptables  /usr/sbin/iptables-legacy  <span class=o>||</span> <span class=nb>true</span>  <span class=o>&amp;&amp;</span> update-alternative  0.4s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev  9/25<span class=o>]</span> RUN pip3 install <span class=nv>yamllint</span><span class=o>==</span>1.16.0                                                                  5.7s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev 10/25<span class=o>]</span> COPY --from<span class=o>=</span>dockercli     /build/ /usr/local/cli                                                   0.2s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev 11/25<span class=o>]</span> COPY --from<span class=o>=</span>frozen-images /build/ /docker-frozen-images                                            0.7s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev 12/25<span class=o>]</span> COPY --from<span class=o>=</span>swagger       /build/ /usr/local/bin/                                                  0.1s
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev 22/25<span class=o>]</span> COPY --from<span class=o>=</span>rootlesskit   /build/ /usr/local/bin/                                                  0.1s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev 23/25<span class=o>]</span> COPY --from<span class=o>=</span>vpnkit        /vpnkit /usr/local/bin/vpnkit.x86_64                                     0.2s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev 24/25<span class=o>]</span> COPY --from<span class=o>=</span>proxy         /build/ /usr/local/bin/                                                  0.1s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>[</span>dev 25/25<span class=o>]</span> WORKDIR /go/src/github.com/docker/docker                                                           0.0s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; exporting to image                                                                                             7.1s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>=</span>&gt; exporting layers                                                                                            7.1s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>=</span>&gt; writing image sha256:1bc0901b7d2b1f958a24445ca93c73401a60e2f9e301255ea092002bb8c1c7b9                       0.0s
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; <span class=o>=</span>&gt; naming to docker.io/library/docker-dev:dry-run-test                                                         0.0s
+</span></span></code></pre></td></tr></table></div></div><p>构建完成后可以先查看一下刚刚构建出的镜像</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>➜  ~ docker image ls -a
+</span></span><span class=line><span class=cl>REPOSITORY   TAG            IMAGE ID       CREATED      SIZE
+</span></span><span class=line><span class=cl>docker-dev   dry-run-test   1bc0901b7d2b   <span class=m>2</span> days ago   2.07GB
+</span></span></code></pre></td></tr></table></div></div><p>构建完成后也会有启动<code>docker-dev</code>的命令提示</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>docker run --rm -i --privileged  -e DOCKER_CROSSPLATFORMS -e BUILD_APT_MIRROR -e BUILDFLAGS -e KEEPBUNDLE -e DOCKER_BUILD_ARGS -e DOCKER_BUILD_GOGC -e DOCKER_BUILD_OPTS -e DOCKER_BUILD_PKGS -e DOCKER_BUILDKIT -e DOCKER_BASH_COMPLETION_PATH -e DOCKER_CLI_PATH -e DOCKER_DEBUG -e DOCKER_EXPERIMENTAL -e DOCKER_GITCOMMIT -e DOCKER_GRAPHDRIVER -e DOCKER_LDFLAGS -e DOCKER_PORT -e DOCKER_REMAP_ROOT -e DOCKER_STORAGE_OPTS -e DOCKER_TEST_HOST -e DOCKER_USERLANDPROXY -e DOCKERD_ARGS -e TEST_INTEGRATION_DIR -e TEST_SKIP_INTEGRATION -e TEST_SKIP_INTEGRATION_CLI -e TESTDEBUG -e TESTDIRS -e TESTFLAGS -e TESTFLAGS_INTEGRATION -e TESTFLAGS_INTEGRATION_CLI -e TEST_FILTER -e TIMEOUT -e VALIDATE_REPO -e VALIDATE_BRANCH -e VALIDATE_ORIGIN_BRANCH -e HTTP_PROXY -e HTTPS_PROXY -e NO_PROXY -e http_proxy -e https_proxy -e no_proxy -e VERSION -e PLATFORM -e DEFAULT_PRODUCT_LICENSE -e PRODUCT -v <span class=s2>&#34;/home/jason/repos/moby-fork/.:/go/src/github.com/docker/docker/.&#34;</span> -v <span class=s2>&#34;/home/jason/repos/moby-fork/.git:/go/src/github.com/docker/docker/.git&#34;</span> -v docker-dev-cache:/root/.cache    -t <span class=s2>&#34;docker-dev:dry-run-test&#34;</span> bash
+</span></span></code></pre></td></tr></table></div></div><p>进入之后，可以看一下当前目录有哪些文件</p><img src=https://images.961110.xyz:5001/i/2021/11/01/344dda91545cbed1cc59cf2daa90a848.png alt=image-20211101111913141 style=zoom:67%><p>从镜像启动命令可以看出，实际是将主机的moby目录挂载到了当前路径。也就是说，如果在主机或者<code>docker-dev</code>中修改了代码，会同步修改。</p><h3 id=docker-dev环境>docker-dev环境</h3><h4 id=docker-version>docker version</h4><p>初始环境中是没有docker engine的，需要自行编译</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@c17a2f34853b:/go/src/github.com/docker/docker# docker version
+</span></span><span class=line><span class=cl>Client:
+</span></span><span class=line><span class=cl> Version:      17.06.2-ce
+</span></span><span class=line><span class=cl> API version:  1.30
+</span></span><span class=line><span class=cl> Go version:   go1.8.3
+</span></span><span class=line><span class=cl> Git commit:   cec0b72
+</span></span><span class=line><span class=cl> Built:        Tue Sep  <span class=m>5</span> 19:57:21 <span class=m>2017</span>
+</span></span><span class=line><span class=cl> OS/Arch:      linux/amd64
+</span></span><span class=line><span class=cl> Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+</span></span></code></pre></td></tr></table></div></div><h4 id=go-env>go env</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@9e6c8aab5a7f:/go/src/github.com/docker/docker# go env
+</span></span><span class=line><span class=cl><span class=nv>GO111MODULE</span><span class=o>=</span><span class=s2>&#34;off&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOARCH</span><span class=o>=</span><span class=s2>&#34;amd64&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOBIN</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOCACHE</span><span class=o>=</span><span class=s2>&#34;/root/.cache/go-build&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOENV</span><span class=o>=</span><span class=s2>&#34;/root/.config/go/env&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOEXE</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOFLAGS</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOHOSTARCH</span><span class=o>=</span><span class=s2>&#34;amd64&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOHOSTOS</span><span class=o>=</span><span class=s2>&#34;linux&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GONOPROXY</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GONOSUMDB</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOOS</span><span class=o>=</span><span class=s2>&#34;linux&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOPATH</span><span class=o>=</span><span class=s2>&#34;/go&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOPRIVATE</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOPROXY</span><span class=o>=</span><span class=s2>&#34;https://goproxy.cn,direct&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOROOT</span><span class=o>=</span><span class=s2>&#34;/usr/local/go&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOSUMDB</span><span class=o>=</span><span class=s2>&#34;sum.golang.org&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOTMPDIR</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOTOOLDIR</span><span class=o>=</span><span class=s2>&#34;/usr/local/go/pkg/tool/linux_amd64&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GCCGO</span><span class=o>=</span><span class=s2>&#34;gccgo&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>AR</span><span class=o>=</span><span class=s2>&#34;ar&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CC</span><span class=o>=</span><span class=s2>&#34;gcc&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CXX</span><span class=o>=</span><span class=s2>&#34;g++&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CGO_ENABLED</span><span class=o>=</span><span class=s2>&#34;1&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOMOD</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CGO_CFLAGS</span><span class=o>=</span><span class=s2>&#34;-g -O2&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CGO_CPPFLAGS</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CGO_CXXFLAGS</span><span class=o>=</span><span class=s2>&#34;-g -O2&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CGO_FFLAGS</span><span class=o>=</span><span class=s2>&#34;-g -O2&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CGO_LDFLAGS</span><span class=o>=</span><span class=s2>&#34;-g -O2&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>PKG_CONFIG</span><span class=o>=</span><span class=s2>&#34;pkg-config&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>GOGCCFLAGS</span><span class=o>=</span><span class=s2>&#34;-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build033151478=/tmp/go-build -gno-record-gcc-switches&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=编译docker-binary>编译docker binary</h3><h4 id=编译>编译</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@c17a2f34853b:/go/src/github.com/docker/docker# hack/make.sh binary
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Removing bundles/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---&gt; Making bundle: binary <span class=o>(</span>in bundles/binary<span class=o>)</span>
+</span></span><span class=line><span class=cl>Building: bundles/binary-daemon/dockerd-dev
+</span></span><span class=line><span class=cl><span class=nv>GOOS</span><span class=o>=</span><span class=s2>&#34;&#34;</span> <span class=nv>GOARCH</span><span class=o>=</span><span class=s2>&#34;&#34;</span> <span class=nv>GOARM</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>Created binary: bundles/binary-daemon/dockerd-dev
+</span></span><span class=line><span class=cl>Copying nested executables into bundles/binary-daemon
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>root@c17a2f34853b:/go/src/github.com/docker/docker#
+</span></span></code></pre></td></tr></table></div></div><p>内容如下</p><img src=https://images.961110.xyz:5001/i/2021/11/01/binary.png alt=image-20211101115527967 style=zoom:67%><h4 id=安装>安装</h4><p>在项目目录输入<code>make install</code>，会把刚刚编译生成的各个执行文件拷贝到<code>/usr/local/bin/</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@c17a2f34853b:/go/src/github.com/docker/docker# make install
+</span></span><span class=line><span class=cl>Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+</span></span><span class=line><span class=cl>Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+</span></span><span class=line><span class=cl>Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+</span></span><span class=line><span class=cl>Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+</span></span><span class=line><span class=cl><span class=nv>KEEPBUNDLE</span><span class=o>=</span><span class=m>1</span> hack/make.sh install-binary
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---&gt; Making bundle: install-binary <span class=o>(</span>in bundles/install-binary<span class=o>)</span>
+</span></span><span class=line><span class=cl>Installing dockerd to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing runc to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing containerd to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing ctr to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing containerd-shim to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing docker-proxy to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing docker-init to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing rootlesskit to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing rootlesskit-docker-proxy to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing dockerd-rootless.sh to /usr/local/bin/
+</span></span><span class=line><span class=cl>Installing vpnkit to /usr/local/bin/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>root@c17a2f34853b:/go/src/github.com/docker/docker#
+</span></span></code></pre></td></tr></table></div></div><p>输入<code>dockerd &</code>在后台启动dockerd（如果想要开启debug模式的话，加一个<code>-D</code>参数），然后输入<code>docker version</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>root@c17a2f34853b:/go/src/github.com/docker/docker# docker version
+</span></span><span class=line><span class=cl>DEBU<span class=o>[</span>2021-11-01T04:00:11.890237855Z<span class=o>]</span> Calling GET /_ping
+</span></span><span class=line><span class=cl>DEBU<span class=o>[</span>2021-11-01T04:00:11.891512505Z<span class=o>]</span> Calling GET /v1.30/version
+</span></span><span class=line><span class=cl>Client:
+</span></span><span class=line><span class=cl> Version:      17.06.2-ce
+</span></span><span class=line><span class=cl> API version:  1.30
+</span></span><span class=line><span class=cl> Go version:   go1.8.3
+</span></span><span class=line><span class=cl> Git commit:   cec0b72
+</span></span><span class=line><span class=cl> Built:        Tue Sep  <span class=m>5</span> 19:57:21 <span class=m>2017</span>
+</span></span><span class=line><span class=cl> OS/Arch:      linux/amd64
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Server:
+</span></span><span class=line><span class=cl> Version:      dev
+</span></span><span class=line><span class=cl> API version:  1.40 <span class=o>(</span>minimum version 1.12<span class=o>)</span>
+</span></span><span class=line><span class=cl> Go version:   go1.13.15
+</span></span><span class=line><span class=cl> Git commit:   e2b63fbe46
+</span></span><span class=line><span class=cl> Built:        Mon Nov  <span class=m>1</span> 03:53:11 <span class=m>2021</span>
+</span></span><span class=line><span class=cl> OS/Arch:      linux/amd64
+</span></span><span class=line><span class=cl> Experimental: <span class=nb>false</span>
+</span></span><span class=line><span class=cl>root@c17a2f34853b:/go/src/github.com/docker/docker#
+</span></span></code></pre></td></tr></table></div></div><p>可以看到刚刚编译好的dockerd已经运行起来了，版本也是我们的dev版。</p><p>可以用hello world这个检查镜像试试运行是否正常：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># docker run hello-world</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Unable to find image <span class=s1>&#39;hello-world:latest&#39;</span> locally
+</span></span><span class=line><span class=cl>latest: Pulling from library/hello-world
+</span></span><span class=line><span class=cl>2db29710123e: Pull <span class=nb>complete</span>
+</span></span><span class=line><span class=cl>Digest: sha256:37a0b92b08d4919615c3ee023f7ddb068d12b8387475d64c622ac30f45c29c51
+</span></span><span class=line><span class=cl>Status: Downloaded newer image <span class=k>for</span> hello-world:latest
+</span></span><span class=line><span class=cl>INFO<span class=o>[</span>2021-11-01T06:36:18.265460389Z<span class=o>]</span> shim containerd-shim started                  <span class=nv>address</span><span class=o>=</span><span class=s2>&#34;unix:///run/containerd/s/92a66bf121c2fc3d2061a0e56a70ac73c148421caab878528d96b31a6cf23b24&#34;</span> <span class=nv>debug</span><span class=o>=</span><span class=nb>false</span> <span class=nv>pid</span><span class=o>=</span><span class=m>912</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Hello from Docker!
+</span></span><span class=line><span class=cl>This message shows that your installation appears to be working correctly.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>INFO<span class=o>[</span>2021-11-01T06:36:18.494924873Z<span class=o>]</span> shim reaped                                   <span class=nv>id</span><span class=o>=</span>7f500aadff4b87ef747825e95a182bc00fe033dcacb4f976aa3b4fd8db98cea4
+</span></span><span class=line><span class=cl>INFO<span class=o>[</span>2021-11-01T06:36:18.505731593Z<span class=o>]</span> ignoring event                                <span class=nv>module</span><span class=o>=</span>libcontainerd <span class=nv>namespace</span><span class=o>=</span>moby <span class=nv>topic</span><span class=o>=</span>/tasks/delete <span class=nv>type</span><span class=o>=</span><span class=s2>&#34;*events.TaskDelete&#34;</span>
+</span></span><span class=line><span class=cl>root@c17a2f34853b:/go/src/github.com/docker/docker#
+</span></span></code></pre></td></tr></table></div></div><h3 id=使用docker-dev镜像编译遇到的问题>使用docker-dev镜像编译遇到的问题</h3><p>在国内最主要的就是网络问题，其他的都好解决。</p><h4 id=从github克隆项目超时>从github克隆项目超时</h4><p>终端输出没有记录到，不过这个问题和下面一个问题相同，都是因为被墙的原因。</p><h4 id=go-install超时>go install超时</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>➜  moby git:<span class=o>(</span>master<span class=o>)</span> ✗ make build
+</span></span><span class=line><span class=cl>docker build  --build-arg<span class=o>=</span>GO_VERSION  -f <span class=s2>&#34;Dockerfile&#34;</span> --target<span class=o>=</span>final   -t <span class=s2>&#34;docker-dev&#34;</span> .
+</span></span><span class=line><span class=cl><span class=o>[</span>+<span class=o>]</span> Building 873.7s <span class=o>(</span>41/75<span class=o>)</span>
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl> <span class=o>=</span>&gt; CANCELED <span class=o>[</span>dockercli 2/2<span class=o>]</span> RUN --mount<span class=o>=</span><span class=nv>type</span><span class=o>=</span>cache,target<span class=o>=</span>/root/.cache/go-build     --mount<span class=o>=</span><span class=nv>type</span><span class=o>=</span>cache,target<span class=o>=</span>/  24.6s
+</span></span><span class=line><span class=cl>------
+</span></span><span class=line><span class=cl> &gt; <span class=o>[</span>vndr 1/1<span class=o>]</span> RUN --mount<span class=o>=</span><span class=nv>type</span><span class=o>=</span>cache,target<span class=o>=</span>/root/.cache/go-build     --mount<span class=o>=</span><span class=nv>type</span><span class=o>=</span>cache,target<span class=o>=</span>/go/pkg/mod         <span class=nv>GOBIN</span><span class=o>=</span>/build/ <span class=nv>GO111MODULE</span><span class=o>=</span>on go install <span class=s2>&#34;github.com/LK4D4/vndr@v0.1.2&#34;</span>      <span class=o>&amp;&amp;</span> /build/vndr --help:
+</span></span><span class=line><span class=cl> &gt; <span class=c1>#49 24.73 go install: github.com/LK4D4/vndr@v0.1.2: github.com/LK4D4/vndr@v0.1.2: Get &#34;https://proxy.golang.org/github.com/%21l%21k4%21d4/vndr/@v/v0.1.2.info&#34;: dial tcp 172.217.160.81:443: connect: connection refused</span>
+</span></span><span class=line><span class=cl>------
+</span></span><span class=line><span class=cl>------
+</span></span><span class=line><span class=cl> &gt; <span class=o>[</span>shfmt 1/1<span class=o>]</span> RUN --mount<span class=o>=</span><span class=nv>type</span><span class=o>=</span>cache,target<span class=o>=</span>/root/.cache/go-build     --mount<span class=o>=</span><span class=nv>type</span><span class=o>=</span>cache,target<span class=o>=</span>/go/pkg/mod         <span class=nv>GOBIN</span><span class=o>=</span>/build/ <span class=nv>GO111MODULE</span><span class=o>=</span>on go install <span class=s2>&#34;mvdan.cc/sh/v3/cmd/shfmt@v3.0.2&#34;</span>      <span class=o>&amp;&amp;</span> /build/shfmt --version:
+</span></span><span class=line><span class=cl> &gt; <span class=c1>#55 24.68 go install: mvdan.cc/sh/v3/cmd/shfmt@v3.0.2: mvdan.cc/sh/v3/cmd/shfmt@v3.0.2: Get &#34;https://proxy.golang.org/mvdan.cc/sh/v3/cmd/shfmt/@v/v3.0.2.info&#34;: dial tcp 172.217.160.81:443: connect: connection refused</span>
+</span></span><span class=line><span class=cl>------
+</span></span><span class=line><span class=cl>executor failed running <span class=o>[</span>/bin/sh -c <span class=nv>GOBIN</span><span class=o>=</span>/build/ <span class=nv>GO111MODULE</span><span class=o>=</span>on go install <span class=s2>&#34;mvdan.cc/sh/v3/cmd/shfmt@</span><span class=si>${</span><span class=nv>SHFMT_VERSION</span><span class=si>}</span><span class=s2>&#34;</span>      <span class=o>&amp;&amp;</span> /build/shfmt --version<span class=o>]</span>: <span class=nb>exit</span> code: <span class=m>1</span>
+</span></span><span class=line><span class=cl>make: *** <span class=o>[</span>Makefile:214: build<span class=o>]</span> Error <span class=m>1</span>
+</span></span><span class=line><span class=cl>➜  moby git:<span class=o>(</span>master<span class=o>)</span> ✗
+</span></span></code></pre></td></tr></table></div></div><h4 id=go无法找到mian模块>go无法找到mian模块</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>➜  moby git:<span class=o>(</span>69f9c8c906<span class=o>)</span> ✗ make <span class=nv>BIND_DIR</span><span class=o>=</span>. shell
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Makefile:157: The docker client CLI has moved to github.com/docker/cli. For a dev-test cycle involving the CLI, run:
+</span></span><span class=line><span class=cl> <span class=nv>DOCKER_CLI_PATH</span><span class=o>=</span>/host/path/to/cli/binary make shell
+</span></span><span class=line><span class=cl> <span class=k>then</span> change the cli and compile into a binary at the same location.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>DOCKER_BUILDKIT</span><span class=o>=</span><span class=s2>&#34;1&#34;</span> docker build --build-arg<span class=o>=</span>GO_VERSION  --build-arg<span class=o>=</span><span class=nv>CROSS</span><span class=o>=</span><span class=nb>false</span> --target<span class=o>=</span>dev -t <span class=s2>&#34;docker-dev:HEAD&#34;</span> -f <span class=s2>&#34;Dockerfile&#34;</span> .
+</span></span><span class=line><span class=cl><span class=o>[</span>+<span class=o>]</span> Building 8.9s <span class=o>(</span>30/68<span class=o>)</span>
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>------
+</span></span><span class=line><span class=cl> &gt; <span class=o>[</span>vndr 3/3<span class=o>]</span> RUN <span class=nv>PREFIX</span><span class=o>=</span>/build ./install.sh vndr:
+</span></span><span class=line><span class=cl><span class=c1>#42 3.016 + RM_GOPATH=0</span>
+</span></span><span class=line><span class=cl><span class=c1>#42 3.016 + TMP_GOPATH=</span>
+</span></span><span class=line><span class=cl><span class=c1>#42 3.016 + : /build</span>
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl><span class=c1>#42 6.332 + go build -buildmode=pie -v -o /build/vndr .</span>
+</span></span><span class=line><span class=cl><span class=c1>#42 6.361 go: cannot find main module, but found .git/config in /tmp/tmp.ZFV3RuyK4q/src/github.com/LK4D4/vndr</span>
+</span></span><span class=line><span class=cl><span class=c1>#42 6.361       to create a module there, run:</span>
+</span></span><span class=line><span class=cl><span class=c1>#42 6.361       go mod init</span>
+</span></span><span class=line><span class=cl>------
+</span></span><span class=line><span class=cl>executor failed running <span class=o>[</span>/bin/sh -c <span class=nv>PREFIX</span><span class=o>=</span>/build ./install.sh <span class=nv>$INSTALL_BINARY_NAME</span><span class=o>]</span>: <span class=nb>exit</span> code: <span class=m>1</span>
+</span></span><span class=line><span class=cl>make: *** <span class=o>[</span>Makefile:158: build<span class=o>]</span> Error <span class=m>1</span>
+</span></span></code></pre></td></tr></table></div></div><p>仿佛是因为<strong>GO111MODULE</strong>这个环境变量的问题，在Dockerfile将其配置为<code>off</code>之后就编译成功了。需要了解原理的话看最后的参考链接。</p><h4 id=文件不完整>文件不完整</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#20 2.670 + url=https://download.docker.com/linux/static</span>
+</span></span><span class=line><span class=cl><span class=c1>#20 2.670 + curl -Ls https://download.docker.com/linux/static/stable/x86_64/docker-17.06.2-ce.tgz</span>
+</span></span><span class=line><span class=cl><span class=c1>#20 2.674 + tar -xz docker/docker</span>
+</span></span><span class=line><span class=cl><span class=c1>#20 276.2</span>
+</span></span><span class=line><span class=cl><span class=c1>#20 276.2 gzip: stdin: unexpected end of file</span>
+</span></span><span class=line><span class=cl><span class=c1>#20 276.2 tar: Unexpected EOF in archive</span>
+</span></span><span class=line><span class=cl><span class=c1>#20 276.2 tar: Error is not recoverable: exiting now</span>
+</span></span><span class=line><span class=cl>------
+</span></span><span class=line><span class=cl>executor failed running <span class=o>[</span>/bin/sh -c <span class=nv>PREFIX</span><span class=o>=</span>/build ./install.sh <span class=nv>$INSTALL_BINARY_NAME</span><span class=o>]</span>: <span class=nb>exit</span> code: <span class=m>2</span>
+</span></span><span class=line><span class=cl>make: *** <span class=o>[</span>Makefile:158: build<span class=o>]</span> Error <span class=m>1</span>
+</span></span></code></pre></td></tr></table></div></div><p>目测是下载docker-17.06.2-ce.tgz这个文件的时候没有下载完整，<code>make clean</code>后重新build一次。</p><h4 id=提示docker-client-cli项目已经搬迁>提示docker client CLI项目已经搬迁</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>Makefile:157: The docker client CLI has moved to github.com/docker/cli. For a dev-test cycle involving the CLI, run:
+</span></span><span class=line><span class=cl> <span class=nv>DOCKER_CLI_PATH</span><span class=o>=</span>/host/path/to/cli/binary make shell
+</span></span><span class=line><span class=cl> <span class=k>then</span> change the cli and compile into a binary at the same location.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>DOCKER_BUILDKIT</span><span class=o>=</span><span class=s2>&#34;1&#34;</span> docker build --build-arg<span class=o>=</span>GO_VERSION  --build-arg<span class=o>=</span><span class=nv>CROSS</span><span class=o>=</span><span class=nb>false</span> --target<span class=o>=</span>dev -t <span class=s2>&#34;docker-dev:dry-run-test&#34;</span> -f <span class=s2>&#34;Dockerfile&#34;</span> .
+</span></span></code></pre></td></tr></table></div></div><p>这个影响不大，是因为前后端分开维护的原因。可以自行编译CLI，<a class=link href=https://github.com/moby/moby/blob/master/docs/contributing/set-up-dev-env.md target=_blank rel=noopener>参考链接</a>，不编译也不影响。</p><h2 id=在本地配置环境进行编译>在本地配置环境进行编译</h2><h3 id=安装依赖的库>安装依赖的库</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt-get install -y libbtrfs-dev libbtrfs0 gcc pkg-config libdevmapper-dev
+</span></span></code></pre></td></tr></table></div></div><h3 id=安装并配置go开发环境>安装并配置GO开发环境</h3><p>教程请移步其他博客。</p><h3 id=下载源码>下载源码</h3><p>将<a class=link href=https://github.com/moby/moby target=_blank rel=noopener>moby的项目</a>克隆到<code>$GOPATH/src/github.com/docker/</code>目录下，并将moby更名为docker，也就是说docker源码的路径是<code>$GOPATH/src/github.com/docker/docker</code></p><img src=https://images.961110.xyz:5001/i/2021/11/01/docker.png alt=image-20211101170629004 style=zoom:67%><h3 id=编译-1>编译</h3><p>在docker源码目录下输入</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=nv>VERSION</span><span class=o>=</span>testbuild <span class=nv>DOCKER_GITCOMMIT</span><span class=o>=</span><span class=m>1</span> ./hack/make.sh binary
+</span></span></code></pre></td></tr></table></div></div><p><strong>注意</strong>：</p><ul><li><code>VERSION=xxx</code>是指定构建后的docker版本，比如直接安装，会显示<code>18.09.3</code>，此处我们将版本命名为<code>testbuild</code>。</li><li>在编译指令中，你还可以选择储存引擎，只需要再命令前加上<code>DOCKER_GRAPHDRIVER=overlay2</code>就可以了</li><li>构建完成后，生成的二进制文件储存在<code>$GOPATH/src/github.com/docker/docker/bundles/binary-daemon</code>目录下，名字是<code>dockerd</code>。使用<code>ls -l</code>命令可以看到这里已经创建了软连接<code>dockerd -> dockerd-testbuild</code></li></ul><h3 id=替换docker启动文件>替换docker启动文件</h3><p>用生成的<code>dockerd</code>替换掉当前系统的docker启动文件。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 停止系统中正在运行的dockerd</span>
+</span></span><span class=line><span class=cl>$ systemctl stop docker
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#找到docker服务文件的位置</span>
+</span></span><span class=line><span class=cl>$ systemctl cat docker.service
+</span></span><span class=line><span class=cl><span class=c1>#输出的第一行就是docker.service的路径，修改ExecStart</span>
+</span></span><span class=line><span class=cl>/lib/systemd/system/docker.service
+</span></span></code></pre></td></tr></table></div></div><p>修改docker.service，找到<code>ExecStart=/usr/bin/dockerd xxx</code>，将其中的<code>/usr/bin.dockerd</code>替换成刚刚生成的二进制文件，也就是<code>$GOPATH/src/github.com/docker/docker/bundles/binary-daemon/dockerd</code></p><p><strong>注意</strong>：这里的<code>$GOPATH</code>要用绝对路径，每个人设置的路径是不同的。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$GOPATH</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=重载及启动docker服务>重载及启动docker服务</h3><p>替换完成后，终端输入</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ systemctl daemon-reload
+</span></span></code></pre></td></tr></table></div></div><p>重载完成后，就可以启动引擎了</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ systemctl start docker
+</span></span></code></pre></td></tr></table></div></div><p>验证是否替换成功，执行<code>sudo docker version</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>➜  binary-daemon docker version
+</span></span><span class=line><span class=cl>Client: Docker Engine - Community
+</span></span><span class=line><span class=cl> Version:           20.10.10
+</span></span><span class=line><span class=cl> API version:       1.40
+</span></span><span class=line><span class=cl> Go version:        go1.16.9
+</span></span><span class=line><span class=cl> Git commit:        b485636
+</span></span><span class=line><span class=cl> Built:             Mon Oct <span class=m>25</span> 07:42:59 <span class=m>2021</span>
+</span></span><span class=line><span class=cl> OS/Arch:           linux/amd64
+</span></span><span class=line><span class=cl> Context:           default
+</span></span><span class=line><span class=cl> Experimental:      <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Server:
+</span></span><span class=line><span class=cl> Engine:
+</span></span><span class=line><span class=cl>  Version:          testbuild
+</span></span><span class=line><span class=cl>  API version:      1.40 <span class=o>(</span>minimum version 1.12<span class=o>)</span>
+</span></span><span class=line><span class=cl>  Go version:       go1.13.15
+</span></span><span class=line><span class=cl>  Git commit:       <span class=m>1</span>
+</span></span><span class=line><span class=cl>  Built:            Fri Oct <span class=m>29</span> 11:14:50 <span class=m>2021</span>
+</span></span><span class=line><span class=cl>  OS/Arch:          linux/amd64
+</span></span><span class=line><span class=cl>  Experimental:     <span class=nb>false</span>
+</span></span><span class=line><span class=cl> containerd:
+</span></span><span class=line><span class=cl>  Version:          1.4.11
+</span></span><span class=line><span class=cl>  GitCommit:        5b46e404f6b9f661a205e28d59c982d3634148f8
+</span></span><span class=line><span class=cl> runc:
+</span></span><span class=line><span class=cl>  Version:          1.0.2
+</span></span><span class=line><span class=cl>  GitCommit:        v1.0.2-0-g52b36a2
+</span></span><span class=line><span class=cl> docker-init:
+</span></span><span class=line><span class=cl>  Version:          0.19.0
+</span></span><span class=line><span class=cl>  GitCommit:        de40ad0
+</span></span><span class=line><span class=cl>➜  binary-daemon
+</span></span></code></pre></td></tr></table></div></div><p>可以看到Docker Engine已经替换成了刚刚编译的版本。</p><h2 id=参考资料>参考资料</h2><ol><li><a class=link href=https://ops.tips/blog/compiling-your-own-forked-docker-release/ target=_blank rel=noopener>Compiling and running your own forked Docker release | OpsTips</a></li><li><a class=link href=https://github.com/moby/moby/blob/master/docs/contributing/set-up-dev-env.md target=_blank rel=noopener>moby/set-up-dev-env.md at master · moby/moby (github.com)</a></li><li><a class=link href=https://swayye.xyz/2019/09/03/%e5%88%a9%e7%94%a8go%e7%bc%96%e8%af%91%e5%99%a8%e6%ba%90%e7%a0%81%e7%bc%96%e8%af%91docker/ target=_blank rel=noopener>利用go编译器源码编译docker | 一葉扁舟 (swayye.xyz)</a></li><li><a class=link href=https://github.com/docker/docker-ce target=_blank rel=noopener>docker/docker-ce: This repository is deprecated and will be archived (Docker CE itself is NOT deprecated) see the https://github.com/docker/docker-ce/blob/master/README.md</a></li><li><a class=link href=https://github.com/docker/cli target=_blank rel=noopener>docker/cli: The Docker CLI (github.com)</a></li><li><a class=link href=https://github.com/moby/moby target=_blank rel=noopener>moby/moby: Moby Project - a collaborative project for the container ecosystem to assemble container-based systems (github.com)</a></li><li><a class=link href=https://zhuanlan.zhihu.com/p/374372749 target=_blank rel=noopener>GO111MODULE 是个啥？ - 知乎 (zhihu.com)</a></li><li><a class=link href=https://www.a-programmer.top/2019/04/24/%e7%bc%96%e8%af%91docker%e6%ba%90%e7%a0%81%e5%b9%b6%e7%94%b1%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%90%af%e5%8a%a8docker/ target=_blank rel=noopener>编译docker源码并由二进制启动docker | 成长录-知行合一 (a-programmer.top)</a></li></ol></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 2021-12-11 20:33:00</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=[".main-article",".widget--toc"];e.forEach(e=>{const t=document.querySelector(e);t&&renderMathInElement(t,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})})</script></article><script src=//cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js></script><div id=tcomment></div><style>.twikoo{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}:root[data-scheme=dark]{--twikoo-body-text-color-main:rgba(255, 255, 255, 0.9);--twikoo-body-text-color:rgba(255, 255, 255, 0.7)}.twikoo .el-input-group__prepend,.twikoo .tk-action-icon,.twikoo .tk-submit-action-icon,.twikoo .tk-time,.twikoo .tk-comments-no,.twikoo .tk-comments-count{color:var(--twikoo-body-text-color)}.twikoo .el-input__inner,.twikoo .el-textarea__inner,.twikoo .tk-preview-container,.twikoo .tk-content,.twikoo .tk-nick,.twikoo .tk-send,.twikoo .tk-comments-no,.twikoo .el-input__count,.twikoo .tk-submit-action-icon{color:var(--twikoo-body-text-color-main)!important}.twikoo .el-button{color:var(--twikoo-body-text-color)!important}.twikoo .el-input__count{color:var(--twikoo-body-text-color)!important}.OwO .OwO-body{background-color:var(--body-background)!important;color:var(--body-text-color)!important}</style><script>twikoo.init({envId:"https://comment.961110.xyz:10010",el:"#tcomment",lang:"zh-CN"})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 JasonChio</section><section class=powerby>间歇性更新 持续性尝试更新<br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

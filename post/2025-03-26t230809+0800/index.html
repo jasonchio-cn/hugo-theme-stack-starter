@@ -1,0 +1,351 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="前言 好久没写博客了，最近准备重新开始，所以先来折腾一下博客框架。现在用的是 Halo，虽然功能很丰富，但是绝大部分的功能我都没有用到，而且相对静态博客来说比较重，所以经过一番比较，选择了热度比较高的 Hugo 作为新的起点。\n"><title>Hugo博客搭建-使用 Docker 容器搭建 Hugo 博客环境</title><link rel=canonical href=https://blog.961110.xyz:10010/post/2025-03-26t230809+0800/><link rel=stylesheet href=/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="Hugo博客搭建-使用 Docker 容器搭建 Hugo 博客环境"><meta property='og:description' content="前言 好久没写博客了，最近准备重新开始，所以先来折腾一下博客框架。现在用的是 Halo，虽然功能很丰富，但是绝大部分的功能我都没有用到，而且相对静态博客来说比较重，所以经过一番比较，选择了热度比较高的 Hugo 作为新的起点。\n"><meta property='og:url' content='https://blog.961110.xyz:10010/post/2025-03-26t230809+0800/'><meta property='og:site_name' content='积跬步行千里'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2025-03-26T23:08:09+08:00'><meta property='article:modified_time' content='2025-04-17T23:40:48+08:00'><meta name=twitter:title content="Hugo博客搭建-使用 Docker 容器搭建 Hugo 博客环境"><meta name=twitter:description content="前言 好久没写博客了，最近准备重新开始，所以先来折腾一下博客框架。现在用的是 Halo，虽然功能很丰富，但是绝大部分的功能我都没有用到，而且相对静态博客来说比较重，所以经过一番比较，选择了热度比较高的 Hugo 作为新的起点。\n"><script async src="https://www.googletagmanager.com/gtag/js?id=G-YQ9F51F77Q"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-YQ9F51F77Q")}</script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=https://image.961110.xyz:10010/i/2025/03/avatar-%e8%87%aa%e5%ae%9a%e4%b9%89-1.webp width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>积跬步行千里</a></h1><h2 class=site-description>JasonChio</h2></div></header><ol class=menu-social><li><a href=https://space.bilibili.com/30240401 target=_blank title=Bilibili rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li><li><a href=mailto:zyb389120217@gmail.com target=_blank title=Email rel=me><svg class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M21 14l-3-3h-7a1 1 0 01-1-1V4a1 1 0 011-1h9a1 1 0 011 1v10"/><path d="M14 15v2a1 1 0 01-1 1H6l-3 3V11a1 1 0 011-1h2"/></svg></a></li><li><a href=https://github.com/jasonchio-cn target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#前言>前言</a></li><li><a href=#初始化>初始化</a><ol><li><a href=#hugo-版本>Hugo 版本</a></li><li><a href=#步骤>步骤</a></li></ol></li><li><a href=#网站配置>网站配置</a><ol><li><a href=#网站初始化>网站初始化</a></li><li><a href=#主题配置>主题配置</a></li></ol></li><li><a href=#编写发布>编写&&发布</a></li><li><a href=#总结>总结</a></li><li><a href=#参考链接>参考链接</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/post/2025-03-26t230809+0800/>Hugo博客搭建-使用 Docker 容器搭建 Hugo 博客环境</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2025-03-26T23:08:09+08:00>2025-03-26</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 5 分钟</time></div></footer></div></header><section class=article-content><h2 id=前言>前言</h2><p>好久没写博客了，最近准备重新开始，所以先来折腾一下博客框架。现在用的是 Halo，虽然功能很丰富，但是绝大部分的功能我都没有用到，而且相对静态博客来说比较重，所以经过一番比较，选择了热度比较高的 Hugo 作为新的起点。</p><p>因为我比较喜欢用 Docker 容器来构建各种环境，可以避免在本地电脑上增加各种配置，也方便迁移，所以下文的所有内容都将基于容器环境。</p><h2 id=初始化>初始化</h2><h3 id=hugo-版本><a class=link href=https://hugo.opendocs.io/installation/linux/#%e7%89%88%e6%9c%ac target=_blank rel=noopener>Hugo 版本</a></h3><p>如下是 Hugo 官方的说明，因为下面用到的主题需要拓展版 Hugo，所以博主选择的也是拓展版，也是官方推荐的版本。</p><blockquote><p>Hugo有两个版本：标准版和扩展版。使用扩展版，您可以：</p><ul><li>在<a class=link href=https://hugo.opendocs.io/content-management/image-processing/ target=_blank rel=noopener>处理图像</a>时，将图像编码为WebP格式。无论您使用哪个版本，都可以解码WebP图像。</li><li>使用内置的LibSass转译器，<a class=link href=https://hugo.opendocs.io/hugo-pipes/transpile-sass-to-css/ target=_blank rel=noopener>将Sass转译为CSS</a>。使用<a class=link href=https://hugo.opendocs.io/hugo-pipes/transpile-sass-to-css/#dart-sass target=_blank rel=noopener>Dart Sass</a>转译器时不需要扩展版。</li></ul><p>我们建议您安装扩展版。</p></blockquote><h3 id=步骤>步骤</h3><p>依赖的 docker-compose 文件如下，为了避免太折腾，所以我选择了环境最全的镜像标签 <code>exts</code>，所有的镜像标签可以在 <a class=link href=https://docker.hugomods.com/zh-hans/docs/tags/ target=_blank rel=noopener><strong>这里</strong></a> 查看，也有对应的说明。</p><p>如果完全从头开始构建，那这里需要按如下步骤执行：</p><ol><li>初始化 Hugo 项目；</li></ol><details><summary>点击查看 docker-compose 配置</summary><pre><code>``` yaml
+services:
+  hugo:
+    image: hugomods/hugo:exts
+    container_name: hugo
+    hostname: hugo
+    # restart: unless-stopped
+    # command: server -D
+    restart: no
+    command: new site /src --format yaml # format支持json yaml toml
+    ports:
+      - &quot;1313:1313&quot;
+    volumes:
+      - &quot;/mnt/user/appdata/hugo/progressio:/src&quot;  # progressio是项目目录，/src是Hugo默认工作目录
+      - &quot;/mnt/user/appdata/hugo/cache:/tmp/hugo_cache&quot;
+    networks:
+      - halo
+    environment:
+      - PUID=99
+      - PGID=100
+      - UMASK=000
+      - TZ=Asia/Shanghai
+    healthcheck:
+      test: [&quot;CMD&quot;, &quot;curl&quot;, &quot;-f&quot;, &quot;http://localhost:1313&quot;]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+
+networks:
+  halo:
+    name: hugo
+    driver: bridge
+```
+</code></pre></details><p>这里Hugo服务设置成不重启，因为只是想让它初始化一下，在初始化完成后，可以检查一下容器日志。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Congratulations! Your new Hugo site was created in /src.
+</span></span><span class=line><span class=cl>Just a few more steps...
+</span></span><span class=line><span class=cl>1. Change the current directory to /src.
+</span></span><span class=line><span class=cl>2. Create or install a theme:
+</span></span><span class=line><span class=cl>   - Create a new theme with the command &#34;hugo new theme &lt;THEMENAME&gt;&#34;
+</span></span><span class=line><span class=cl>   - Or, install a theme from https://themes.gohugo.io/
+</span></span><span class=line><span class=cl>3. Edit hugo.yaml, setting the &#34;theme&#34; property to the theme name.
+</span></span><span class=line><span class=cl>4. Create new content with the command &#34;hugo new content &lt;SECTIONNAME&gt;/&lt;FILENAME&gt;.&lt;FORMAT&gt;&#34;.
+</span></span><span class=line><span class=cl>5. Start the embedded web server with the command &#34;hugo server --buildDrafts&#34;.
+</span></span><span class=line><span class=cl>See documentation at https://gohugo.io/.
+</span></span></code></pre></td></tr></table></div></div><p>项目目录的文件结构为</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── cache
+</span></span><span class=line><span class=cl>└── progressio
+</span></span><span class=line><span class=cl>    ├── archetypes
+</span></span><span class=line><span class=cl>    ├── assets
+</span></span><span class=line><span class=cl>    ├── content
+</span></span><span class=line><span class=cl>    ├── data
+</span></span><span class=line><span class=cl>    ├── hugo.yaml
+</span></span><span class=line><span class=cl>    ├── i18n
+</span></span><span class=line><span class=cl>    ├── layouts
+</span></span><span class=line><span class=cl>    ├── static
+</span></span><span class=line><span class=cl>    └── themes
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>11 directories, 1 file
+</span></span></code></pre></td></tr></table></div></div><ol><li>以服务器模式启动 Hugo 网站；</li></ol><details><summary>点击查看 docker-compose 配置</summary><pre><code>``` yaml
+services:
+  hugo:
+    image: hugomods/hugo:exts
+    container_name: hugo
+    hostname: hugo
+    restart: unless-stopped
+    command: server -D
+    # restart: no
+    # command: new site /src --format yaml # format支持json yaml toml
+    ports:
+      - &quot;1313:1313&quot;
+    volumes:
+      - &quot;/mnt/user/appdata/hugo/progressio:/src&quot;  # progressio是项目目录，/src是Hugo默认工作目录
+      - &quot;/mnt/user/appdata/hugo/cache:/tmp/hugo_cache&quot;
+    networks:
+      - halo
+    environment:
+      - PUID=99
+      - PGID=100
+      - UMASK=000
+      - TZ=Asia/Shanghai
+    healthcheck:
+      test: [&quot;CMD&quot;, &quot;curl&quot;, &quot;-f&quot;, &quot;http://localhost:1313&quot;]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+
+networks:
+  halo:
+    name: hugo
+    driver: bridge
+```
+</code></pre></details><p>这里Hugo服务改为自动重启，并且命令改为了 <code>server -D</code> 以服务器模式启动。启动后容器日志如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Watching for changes in /src/{archetypes,assets,content,data,i18n,layouts,static}
+</span></span><span class=line><span class=cl>Watching for config changes in /src/hugo.yaml
+</span></span><span class=line><span class=cl>Start building sites … 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>....
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Built in 5 ms
+</span></span><span class=line><span class=cl>Environment: &#34;development&#34;
+</span></span><span class=line><span class=cl>Serving pages from disk
+</span></span><span class=line><span class=cl>Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
+</span></span><span class=line><span class=cl>Web Server is available at http://localhost:1313/ (bind address 0.0.0.0) 
+</span></span><span class=line><span class=cl>Press Ctrl+C to stop
+</span></span></code></pre></td></tr></table></div></div><p>如果日志有<code>Web Server is available at http://localhost:1313/ (bind address 0.0.0.0) </code>表明成功启动，这时候可以尝试访问页面了。</p><p>因为以上只是初始化了项目并启动了服务，网站内容还是空的，所以访问页面什么都没有。</p><p><img src=https://image.961110.xyz:10010/i/2025/04/Pasted-image-20250315182530-a736f2ffc3dffb36-1.webp loading=lazy alt="Pasted image 20250315182530"></p><h2 id=网站配置>网站配置</h2><h3 id=网站初始化>网站初始化</h3><p><code>docker exec -it hugo /bin/sh</code> 进入到容器内部，可以输入 <code>hugo version</code> 确定一下安装的版本是否正确，版本号后缀是 <code>+extended</code> 表示是拓展版。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>/src <span class=c1># hugo version</span>
+</span></span><span class=line><span class=cl>hugo v0.145.0-666444f0a52132f9fec9f71cf25b441cc6a4f355+extended linux/amd64 <span class=nv>BuildDate</span><span class=o>=</span>2025-02-26T15:41:25Z <span class=nv>VendorInfo</span><span class=o>=</span>hugomods
+</span></span></code></pre></td></tr></table></div></div><p>在网站运行目录即<code>/src</code>初始化一个空的 Git 仓库：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>/src <span class=c1># git init</span>
+</span></span><span class=line><span class=cl>hint: Using <span class=s1>&#39;master&#39;</span> as the name <span class=k>for</span> the initial branch. This default branch name
+</span></span><span class=line><span class=cl>hint: is subject to change. To configure the initial branch name to use in all
+</span></span><span class=line><span class=cl>hint: of your new repositories, which will suppress this warning, call:
+</span></span><span class=line><span class=cl>hint:
+</span></span><span class=line><span class=cl>hint:   git config --global init.defaultBranch &lt;name&gt;
+</span></span><span class=line><span class=cl>hint:
+</span></span><span class=line><span class=cl>hint: Names commonly chosen instead of <span class=s1>&#39;master&#39;</span> are <span class=s1>&#39;main&#39;</span>, <span class=s1>&#39;trunk&#39;</span> and
+</span></span><span class=line><span class=cl>hint: <span class=s1>&#39;development&#39;</span>. The just-created branch can be renamed via this command:
+</span></span><span class=line><span class=cl>hint:
+</span></span><span class=line><span class=cl>hint:   git branch -m &lt;name&gt;
+</span></span><span class=line><span class=cl>Initialized empty Git repository in /src/.git/
+</span></span></code></pre></td></tr></table></div></div><h3 id=主题配置>主题配置</h3><p><a class=link href=https://themes.gohugo.io/ target=_blank rel=noopener>官方主题链接</a>，博主这里选择的是 <a class=link href=https://themes.gohugo.io/themes/hugo-theme-stack target=_blank rel=noopener>Stack</a>，<a class=link href=https://demo.stack.jimmycai.com/ target=_blank rel=noopener>Demo</a>，要求的最低 Hugo 版本号在 <a class=link href=https://github.com/CaiJimmy/hugo-theme-stack/blob/master/theme.toml#L23 target=_blank rel=noopener>这里</a> 可以看到，目前（2025年3月15日）最低要求 <code>0.123.0</code>。</p><p>将主题源码克隆到 Hugo 的 <code>theme</code> 目录中，并将其作为子模块进行管理：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>/src <span class=c1># git submodule add https://github.com/CaiJimmy/hugo-theme-stack/ themes/hugo-theme-stack</span>
+</span></span><span class=line><span class=cl>Cloning into <span class=s1>&#39;/src/themes/hugo-theme-stack&#39;</span>...
+</span></span><span class=line><span class=cl>remote: Enumerating objects: 5281, <span class=k>done</span>.
+</span></span><span class=line><span class=cl>remote: Counting objects: 100% <span class=o>(</span>11/11<span class=o>)</span>, <span class=k>done</span>.
+</span></span><span class=line><span class=cl>remote: Compressing objects: 100% <span class=o>(</span>10/10<span class=o>)</span>, <span class=k>done</span>.
+</span></span><span class=line><span class=cl>remote: Total <span class=m>5281</span> <span class=o>(</span>delta 3<span class=o>)</span>, reused <span class=m>1</span> <span class=o>(</span>delta 1<span class=o>)</span>, pack-reused <span class=m>5270</span> <span class=o>(</span>from 2<span class=o>)</span>
+</span></span><span class=line><span class=cl>Receiving objects: 100% <span class=o>(</span>5281/5281<span class=o>)</span>, 1.27 MiB <span class=p>|</span> 27.00 KiB/s, <span class=k>done</span>.
+</span></span><span class=line><span class=cl>Resolving deltas: 100% <span class=o>(</span>3396/3396<span class=o>)</span>, <span class=k>done</span>.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>/src <span class=c1># tree</span>
+</span></span><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── archetypes
+</span></span><span class=line><span class=cl>│   └── default.md
+</span></span><span class=line><span class=cl>├── assets
+</span></span><span class=line><span class=cl>├── content
+</span></span><span class=line><span class=cl>├── data
+</span></span><span class=line><span class=cl>├── hugo.yaml
+</span></span><span class=line><span class=cl>├── i18n
+</span></span><span class=line><span class=cl>├── layouts
+</span></span><span class=line><span class=cl>├── public
+</span></span><span class=line><span class=cl>│   ├── categories
+</span></span><span class=line><span class=cl>│   │   └── index.xml
+</span></span><span class=line><span class=cl>│   ├── index.xml
+</span></span><span class=line><span class=cl>│   ├── sitemap.xml
+</span></span><span class=line><span class=cl>│   └── tags
+</span></span><span class=line><span class=cl>│       └── index.xml
+</span></span><span class=line><span class=cl>├── static
+</span></span><span class=line><span class=cl>└── themes
+</span></span><span class=line><span class=cl>    └── hugo-theme-stack
+</span></span><span class=line><span class=cl>        ├── LICENSE
+</span></span><span class=line><span class=cl>        ├── README.md
+</span></span><span class=line><span class=cl>        ├── archetypes
+</span></span><span class=line><span class=cl>        │   ├── categories.md
+</span></span><span class=line><span class=cl>        │   ├── default.md
+</span></span><span class=line><span class=cl>        │   └── tags.md
+</span></span><span class=line><span class=cl>        ├── assets
+</span></span><span class=line><span class=cl>        │   ├── icons
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></td></tr></table></div></div><p>在配置文件中增加主题配置</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>/src <span class=c1># echo &#34;theme: hugo-theme-stack&#34; &gt;&gt; hugo.yaml</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>/src <span class=c1># cat hugo.yaml </span>
+</span></span><span class=line><span class=cl>baseURL: https://example.org/
+</span></span><span class=line><span class=cl>languageCode: en-us
+</span></span><span class=line><span class=cl>title: My New Hugo Site
+</span></span><span class=line><span class=cl>theme: hugo-theme-stack
+</span></span></code></pre></td></tr></table></div></div><p>再打开网站页面，发现主题已经生效，不是 404 了</p><p><img src=https://image.961110.xyz:10010/i/2025/04/Pasted-image-20250315214028-da1ad2190305d514-1.webp loading=lazy alt="Pasted image 20250315214028"></p><h2 id=编写发布>编写&&发布</h2><p>我这里直接贴出官方的<a class=link href=https://hugo.opendocs.io/zh-cn/getting-started/quick-start/#%e6%b7%bb%e5%8a%a0%e5%86%85%e5%ae%b9 target=_blank rel=noopener>教程</a></p><p>向您的网站添加一个新页面。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>hugo new content/post/my-first-post.md
+</span></span></code></pre></td></tr></table></div></div><p>Hugo 会在 <code>content/post</code> 目录中创建该文件。使用编辑器打开该文件。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>date: &#39;2025-03-15T21:41:56+08:00&#39;
+</span></span><span class=line><span class=cl>title: &#39;My First Post&#39;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span></code></pre></td></tr></table></div></div><p>注意 [front matter] 中的 <code>draft</code> 值为 <code>true</code>。默认情况下，Hugo 在构建网站时不会发布草稿内容。了解更多关于<a class=link href=https://hugo.opendocs.io/getting-started/usage/#draft-future-and-expired-content target=_blank rel=noopener>草稿、将来和过期内容</a>的信息。<strong>但是我们这里需要把其置为 <code>true</code> 或直接删除，才能看到新建的文章。</strong></p><p>在文章正文中添加一些 [markdown]，</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>date: &#39;2025-03-15T21:41:56+08:00&#39;
+</span></span><span class=line><span class=cl>title: &#39;My First Post&#39;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>---
+</span></span><span class=line><span class=cl>## 简介
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>这是 **粗体** 文本，这是 *斜体* 文本。
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>访问 [Hugo](https://gohugo.io) 网站！
+</span></span></code></pre></td></tr></table></div></div><p>保存文件，然后开始构建。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>/src <span class=c1># hugo</span>
+</span></span><span class=line><span class=cl>Start building sites … 
+</span></span><span class=line><span class=cl>hugo v0.145.0-666444f0a52132f9fec9f71cf25b441cc6a4f355+extended linux/amd64 <span class=nv>BuildDate</span><span class=o>=</span>2025-02-26T15:41:25Z <span class=nv>VendorInfo</span><span class=o>=</span>hugomods
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                   <span class=p>|</span> EN  
+</span></span><span class=line><span class=cl>-------------------+-----
+</span></span><span class=line><span class=cl>  Pages            <span class=p>|</span> <span class=m>10</span>  
+</span></span><span class=line><span class=cl>  Paginator pages  <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Non-page files   <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Static files     <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>  Processed images <span class=p>|</span>  <span class=m>1</span>  
+</span></span><span class=line><span class=cl>  Aliases          <span class=p>|</span>  <span class=m>4</span>  
+</span></span><span class=line><span class=cl>  Cleaned          <span class=p>|</span>  <span class=m>0</span>  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Total in <span class=m>245</span> ms
+</span></span></code></pre></td></tr></table></div></div><p>在构建完成后，进入浏览器查看，我这里的地址是 http://192.168.123.222:18099/post ，进去之后发现已经有了刚刚新增的文章。</p><p><img src=https://image.961110.xyz:10010/i/2025/04/Pasted-image-20250315232931-8dd4a332fb9d8f9d-1.webp loading=lazy alt="Pasted image 20250315232931"></p><p><img src=https://image.961110.xyz:10010/i/2025/04/Pasted-image-20250315232950-8ac6986b733e8908-1.webp loading=lazy alt="Pasted image 20250315232950"></p><h2 id=总结>总结</h2><p>到此为止，基于 Docker 容器的 Hugo 博客环境已经初步搭建起来了，剩下的是比较繁琐的配置环节。
+[[81. Hugo博客搭建-Hugo+Stack 主题配置]]</p><h2 id=参考链接>参考链接</h2><ol><li><a class=link href=https://www.jianshu.com/p/08b50a9e6ce9 target=_blank rel=noopener>Docker Compose 搭建 Hugo - 简书</a></li><li><a class=link href=https://hugo.opendocs.io/zh-cn/getting-started/quick-start/ target=_blank rel=noopener>快速入门 | Hugo官方文档</a></li></ol></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 2025-04-17 23:40:48</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=[".main-article",".widget--toc"];e.forEach(e=>{const t=document.querySelector(e);t&&renderMathInElement(t,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})})</script></article><script src=//cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js></script><div id=tcomment></div><style>.twikoo{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}:root[data-scheme=dark]{--twikoo-body-text-color-main:rgba(255, 255, 255, 0.9);--twikoo-body-text-color:rgba(255, 255, 255, 0.7)}.twikoo .el-input-group__prepend,.twikoo .tk-action-icon,.twikoo .tk-submit-action-icon,.twikoo .tk-time,.twikoo .tk-comments-no,.twikoo .tk-comments-count{color:var(--twikoo-body-text-color)}.twikoo .el-input__inner,.twikoo .el-textarea__inner,.twikoo .tk-preview-container,.twikoo .tk-content,.twikoo .tk-nick,.twikoo .tk-send,.twikoo .tk-comments-no,.twikoo .el-input__count,.twikoo .tk-submit-action-icon{color:var(--twikoo-body-text-color-main)!important}.twikoo .el-button{color:var(--twikoo-body-text-color)!important}.twikoo .el-input__count{color:var(--twikoo-body-text-color)!important}.OwO .OwO-body{background-color:var(--body-background)!important;color:var(--body-text-color)!important}</style><script>twikoo.init({envId:"https://comment.961110.xyz:10010",el:"#tcomment",lang:"zh-CN"})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 JasonChio</section><section class=powerby>间歇性更新 持续性尝试更新<br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

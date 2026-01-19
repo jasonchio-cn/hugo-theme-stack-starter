@@ -1,0 +1,339 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="【转载】在 linux 后台运行脚本命令和程序的方法大全，相关技术教程和文档"><title>【转载】在 linux 后台运行脚本命令和程序的方法大全</title><link rel=canonical href=https://blog.961110.xyz:10010/post/%E8%BD%AC%E8%BD%BD%E5%9C%A8-linux-%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%92%8C%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%96%B9%E6%B3%95%E5%A4%A7%E5%85%A8/><link rel=stylesheet href=/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="【转载】在 linux 后台运行脚本命令和程序的方法大全"><meta property='og:description' content="【转载】在 linux 后台运行脚本命令和程序的方法大全，相关技术教程和文档"><meta property='og:url' content='https://blog.961110.xyz:10010/post/%E8%BD%AC%E8%BD%BD%E5%9C%A8-linux-%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%92%8C%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%96%B9%E6%B3%95%E5%A4%A7%E5%85%A8/'><meta property='og:site_name' content='积跬步行千里'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2021-10-24T10:30:00+08:00'><meta property='article:modified_time' content='2021-10-24T10:30:00+08:00'><meta name=twitter:title content="【转载】在 linux 后台运行脚本命令和程序的方法大全"><meta name=twitter:description content="【转载】在 linux 后台运行脚本命令和程序的方法大全，相关技术教程和文档"><script async src="https://www.googletagmanager.com/gtag/js?id=G-YQ9F51F77Q"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-YQ9F51F77Q")}</script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=https://image.961110.xyz:10010/i/2025/03/avatar-%e8%87%aa%e5%ae%9a%e4%b9%89-1.webp width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>积跬步行千里</a></h1><h2 class=site-description>JasonChio</h2></div></header><ol class=menu-social><li><a href=https://space.bilibili.com/30240401 target=_blank title=Bilibili rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li><li><a href=mailto:zyb389120217@gmail.com target=_blank title=Email rel=me><svg class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M21 14l-3-3h-7a1 1 0 01-1-1V4a1 1 0 011-1h9a1 1 0 011 1v10"/><path d="M14 15v2a1 1 0 01-1 1H6l-3 3V11a1 1 0 011-1h2"/></svg></a></li><li><a href=https://github.com/jasonchio-cn target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#1后台执行脚本命令功能介绍>1、后台执行脚本命令功能介绍</a></li><li><a href=#2后台脚本任务测试用例>2、后台脚本任务测试用例</a></li><li><a href=#3linux-后台运行命令和脚本任务的例子>3、linux 后台运行命令和脚本任务的例子</a><ol><li><ol><li><a href=#-例1用->● 例1：用 &</a></li><li><a href=#-例2用-nohup-和->● 例2：用 nohup 和 &</a></li><li><a href=#-例3用-ctrlzjobs-和-bg>● 例3：用 ctrl+z、jobs 和 bg</a></li><li><a href=#-例4用-disownjobs-和->● 例4：用 disown、jobs 和 &</a></li><li><a href=#-例5用-setsid-和->● 例5：用 setsid 和 &</a></li><li><a href=#-例6用-小括号--圆括号-和->● 例6：用 小括号 / 圆括号 和 &</a></li></ol></li></ol></li><li><a href=#4查看后台任务的命令>4、查看后台任务的命令</a></li><li><a href=#5关闭后台任务的命令>5、关闭后台任务的命令</a></li><li><a href=#6前后台任务的转换>6、前后台任务的转换</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/post/%E8%BD%AC%E8%BD%BD%E5%9C%A8-linux-%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4%E5%92%8C%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%96%B9%E6%B3%95%E5%A4%A7%E5%85%A8/>【转载】在 linux 后台运行脚本命令和程序的方法大全</a></h2><h3 class=article-subtitle>【转载】在 linux 后台运行脚本命令和程序的方法大全，相关技术教程和文档</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2021-10-24T10:30:00+08:00>2021-10-24</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 9 分钟</time></div></footer></div></header><section class=article-content><blockquote><p>原文地址 <a class=link href=https://blog.csdn.net/davidhzq/article/details/102766881 target=_blank rel=noopener>https://blog.csdn.net/davidhzq/article/details/102766881</a></p></blockquote><p>需要在 linux 后台执行任务的情况还是经常会遇到的，比如一些费时的操作，或者一些需要长时间存在的程序。当然你也可以把这些任务做成守护进程或者后台服务，但这需要额外的工作量。linux 提供了很多方法可以直接将普通的命令、脚本、应用程序以后台的形式运行起来，这样就不会阻塞终端窗口的继续使用。常用的涉及后台执行的命令有十几多个，包括：&、ctrl+z、bg、fg、nohup、disown、setsid、(cmd)、jobs、ps、kill 等。</p><p>下面先对每个命令的功能作用做一个简单的介绍，然后分别给出使用案例进行详细解释。</p><h2 id=1后台执行脚本命令功能介绍>1、后台执行脚本命令功能介绍</h2><p><code>&</code>：将当前命令以后台的形式运行；
+<code>ctrl+z</code>：将前台任务转后台并冻结；
+<code>bg</code>：将后台冻结的任务再次运行起来；
+<code>fg</code>：将后台任务重新转前台执行；
+<code>nohup</code>：隔离终端挂断信号，是命令的前缀；
+<code>disown</code>：隔离终端挂断信号，事后使用；
+<code>setsid</code>：重新创建一个会话进程来执行任务；
+<code>(cmd)</code>：创建一个独立 shell 来执行命令；
+<code>jobs</code>：查看在后台运行的任务列表；
+<code>ps</code>：查看正在运行的进程信息；
+<code>kill</code>：杀掉某个进程；</p><p> 下面就分别对上面的命令举例来说说如何让脚本命令在后台执行，先看一下测试用例。</p><h2 id=2后台脚本任务测试用例>2、后台脚本任务测试用例</h2><p> 下面所有的例子中的脚本统一使用这个脚本，它的功能是每 2 秒打印一次当前时间。hzqtest8.sh 是测试脚本的名字，.sh 文件最好放在当前用户默认目录中（如果你放在其他目录了，请注意权限问题！）。</p><p><strong>1）创建脚本：</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#创建脚本文件</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ sudo gedit hzqtest8.sh
+</span></span><span class=line><span class=cl><span class=o>[</span>sudo<span class=o>]</span> hzq 的密码：
+</span></span><span class=line><span class=cl><span class=c1>#输入脚本内容</span>
+</span></span><span class=line><span class=cl><span class=c1>#!/bin/bash</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=o>((</span><span class=nv>i</span> <span class=o>=</span> 0<span class=p>;</span> i &lt; 10<span class=p>;</span> i++<span class=o>))</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    sleep <span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=k>$(</span>date<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=c1>#保存退出。</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>2）赋予执行权限：</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ sudo chmod <span class=m>755</span> hzqtest8.s
+</span></span></code></pre></td></tr></table></div></div><h2 id=3linux-后台运行命令和脚本任务的例子>3、linux 后台运行命令和脚本任务的例子</h2><p> 下面通过 6 个典型的使用案例来解释各个命令的功能和使用方法。</p><h4 id=-例1用->● 例1：用 &</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ ./hzqtest8.sh <span class=p>&amp;</span>
+</span></span></code></pre></td></tr></table></div></div><p> 功能：& 加在一个命令的最后，可以把当前行的命令放在后台执行。注意 & 前面有空格。</p><p> 这种方法中，当非正常退出当前 shell 终端时（包括直接叉掉、杀死、直接注销关机等），后台运行的 hzqtest8.sh 也会结束。这是因为脚本在后台运行时，运行脚本的父进程是当前 shell 终端进程，关闭当前 shell 终端时，会发送 hangup 挂断信号给子进程，子进程收到 hangup 信号后也就退出了。</p><p> 但是，如果用 exit 退出，ctrl+d 退出，命令可以继续在后台运行。</p><h4 id=-例2用-nohup-和->● 例2：用 nohup 和 &</h4><p>为了解决上面的问题可以用下面的例子，</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ nohup ./hzqtest8.sh <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span> <span class=m>3640</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ nohup: 忽略输入并把输出追加到<span class=s1>&#39;nohup.out&#39;</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$
+</span></span></code></pre></td></tr></table></div></div><p> 功能：命令前加上 nohup 可以让你退出 shell 之后继续运行相应的进程。nohup 就是忽略当前任务挂断信号的意思。这样就解决上面的问题了。</p><p> 输入 nohup 命令之后会给出提示：nohup: ignoring input and appending output to ‘nohup.out’（中文版参见上文），这是正常提示，直接打回车就可以。</p><ul><li>nohup 默认会把标准输出重定向到默认文件 nohup.out 中，你可以自定义该输出文件，如下例子。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ nohup ./hzqtest8.sh &gt;hzqout.txt <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span> <span class=m>3668</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ nohup: 忽略输入重定向错误到标准输出端
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>+  已完成               nohup ./hzqtest8.sh &gt; hzqout.txt
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$
+</span></span><span class=line><span class=cl><span class=c1>#看一下输出文件里的内容。</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ cat hzqout.txt
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:37:48 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:37:49 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:37:50 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:37:51 CST
+</span></span></code></pre></td></tr></table></div></div><ul><li>如果输入 nohup 后不想打回车，可以用下面的例子，</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ nohup ./hzqtest8.sh &gt;hzqout.txt 2&gt;<span class=p>&amp;</span><span class=m>1</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span> <span class=m>3690</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ cat hzqout.txt
+</span></span><span class=line><span class=cl>nohup: 忽略输入
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:38:53 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:38:54 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:38:55 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:38:56 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:39:02 CST
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>+  已完成               nohup ./hzqtest8.sh &gt; hzqout.txt 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$
+</span></span></code></pre></td></tr></table></div></div><p> 功能解释：2>&amp;1 是将错误提示信息的输出 重定向到 标准输出，而这里的标准输出已经重定向到 hzqout.txt 文件，也就是说标准的错误提示也直接输出到 out.file 文件中，所以就没有提示了，也就不用再打回车了。</p><ul><li>另外，如果你的后台任务没有输出，你可以直接重定向到 / dev/null</li></ul><h4 id=-例3用-ctrlzjobs-和-bg>● 例3：用 ctrl+z、jobs 和 bg</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ ./hzqtest8.sh
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:56:15 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:56:16 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:56:17 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:56:18 CST
+</span></span><span class=line><span class=cl>^Z<span class=o>[</span>3<span class=o>]</span>   已完成               nohup ./hzqtest8.sh &gt; /dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>4<span class=o>]</span>+  已停止               ./hzqtest8.sh
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>4<span class=o>]</span>+  已停止               ./hzqtest8.sh
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>bg</span> <span class=m>4</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>4<span class=o>]</span>+ ./hzqtest8.sh <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ 2019年 10月 25日 星期五 23:57:04 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:57:05 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:57:06 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:57:07 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:57:08 CST
+</span></span><span class=line><span class=cl>2019年 10月 25日 星期五 23:57:09 CST
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>4<span class=o>]</span>+  已完成               ./hzqtest8.sh
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$
+</span></span></code></pre></td></tr></table></div></div><p> 功能：上面的例子中脚本命令事先已经正常执行，然后你可能发现这个任务执行时间比较长，一直独占着终端窗口的使用，很不方便。</p><p> ctrl+z 命令可以将当前的前台任务转后台，也就是放到后台任务池中了，这个时候前台窗口就变成非阻塞状态了，但是要注意转过去的任务在后台默认是冻结状态。从上面例子中可以看出任务输出了 4 行之后中断了。</p><p> 这个时候需要用到 bg 命令，bg 命令的功能就是将后台冻结的任务再次运行起来，但是它需要一个任务 ID 号，而 jobs 命令就是查看所有任务状态的，包括 ID 号。</p><p> 例子中的 bg 4 就是当前任务号码。</p><p> 该例子中没有使用 nohup，有需要的同学可以自行加上，包括重定向都是可以加上的。</p><h4 id=-例4用-disownjobs-和->● 例4：用 disown、jobs 和 &</h4><p> 上面的例子中没有使用 nohup 命令，所以当终端环境强行退出时，后台正在执行的任务 (作业 / 命令 / 程序 / 脚本) 也会退出，由于各种原因你可能想事后加上 nohup 的功能（忽略终端关闭信号），看下面的例子。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ ./hzqtest8.sh &gt;hzqout.txt 2&gt;<span class=p>&amp;</span><span class=m>1</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span> <span class=m>7168</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>+  运行中               ./hzqtest8.sh &gt; hzqout.txt 2&gt;<span class=p>&amp;</span><span class=m>1</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>disown</span> -h %1
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$
+</span></span></code></pre></td></tr></table></div></div><p> 功能：disown 也是隔离终端挂断信号，但主要用于事后使用。上面执行完 disown 之后，你可以强行关闭终端窗口，然后等待 1 分钟后去查看重定向文件 hzqout.txt 看看有没有执行成功，如果成功里面有完整的 10 条信息，并且是连续的。下面的结果可以看到已经成功执行了。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ ps -ef <span class=p>|</span>grep hzqtest
+</span></span><span class=line><span class=cl>hzq        <span class=m>7166</span>   <span class=m>7152</span>  <span class=m>0</span> 01:11 pts/1    00:00:00 grep --color<span class=o>=</span>auto hzqtest
+</span></span><span class=line><span class=cl><span class=c1>#确认后台进程已经执行完毕退出，后面会解释用法。</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ cat hzqout.txt
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 01:11:16 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 01:11:20 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 01:11:24 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 01:11:28 CST
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$
+</span></span></code></pre></td></tr></table></div></div><h4 id=-例5用-setsid-和->● 例5：用 setsid 和 &</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ setsid ./hzqtest8.sh <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span> <span class=m>3001</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ 2019年 10月 26日 星期六 16:27:09 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 16:27:11 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 16:27:13 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 16:27:15 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 16:27:17 CST
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>+  已完成               setsid ./hzqtest8.sh
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$
+</span></span></code></pre></td></tr></table></div></div><p> 功能：setsid 是重新创建一个会话进程来执行任务。setsid 可以起到和 nohup 类似的效果，但是 setsid 更彻底，所以严格上说 setsid 不是忽略终端关闭信号，而是这个后台任务创建之后就与当前终端没有关系了，所以当前终端的关闭自然不会影响到它。</p><p> 同然的原理，大家估计已经想到了，jobs 命令在这个时候是不起作用的。</p><p> 另外，和 nohup 还有一个区别就是，不用多打一个回车，因为它没有提示信息。</p><h4 id=-例6用-小括号--圆括号-和->● 例6：用 小括号 / 圆括号 和 &</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ <span class=o>(</span>./hzqtest8.sh <span class=p>&amp;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ 2019年 10月 26日 星期六 23:58:26 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 23:58:28 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 23:58:30 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 23:58:32 CST
+</span></span><span class=line><span class=cl>2019年 10月 26日 星期六 23:58:34 CST
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$
+</span></span></code></pre></td></tr></table></div></div><p> 功能：小括号可以起到和 setsid 类似的效果，小括号是创建一个独立 shell 来执行命令，当前的后台任务创建之后就与当前终端没有关系了，所以终端的关闭也不会影响到它。</p><p> 同然的原理，jobs 命令在这个时候是不起作用的。</p><p> 另外，和 setsid 一样，圆括号执行命令不用多打一个回车，因为它没有提示信息。</p><h2 id=4查看后台任务的命令>4、查看后台任务的命令</h2><p> 常用的有 jobs 和 ps 命令，区别是 jobs 用于查看当前终端后台运行的任务，换了终端就看不到了（包括关闭终端再重新打开也看不到的）。而 ps 命令用于查看全局所有后台进程的信息，当然可以看到别的终端运行的后台任务。</p><p><strong>1）jobs 命令</strong>
+功能：查看当前终端任务信息</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span> -l
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>-  <span class=m>3427</span> 运行中               nohup ./hzqtest8.sh <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>2<span class=o>]</span>+  <span class=m>3445</span> 运行中               nohup firefox <span class=p>&amp;</span>
+</span></span></code></pre></td></tr></table></div></div><p>jobs -l 选项可以多显示一个 PID 信息。
+第一列：任务序号，注意并不是 PID。
+第二列：+ 号表示当前顶部任务，- 号其次任务，没符号是其他任务。
+第三列：PID（上面例子中，默认情况下没有 PID）。例
+第四列：状态，四种（运行中，已停止，已完成，已杀死）。例
+第五列：任务名称（即刚才运行的命令）。</p><p><strong>2）ps 命令</strong>
+功能：全局查看进程信息</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ ps -ef <span class=p>|</span>grep gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3791</span>   <span class=m>2566</span>  <span class=m>0</span> 00:29 pts/0    00:00:00 sudo gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3792</span>   <span class=m>3791</span>  <span class=m>0</span> 00:29 pts/0    00:00:00 gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3802</span>   <span class=m>2566</span>  <span class=m>0</span> 00:30 pts/0    00:00:00 sudo gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3803</span>   <span class=m>3802</span>  <span class=m>0</span> 00:30 pts/0    00:00:00 gedit
+</span></span><span class=line><span class=cl>hzq        <span class=m>3820</span>   <span class=m>2566</span>  <span class=m>0</span> 00:44 pts/0    00:00:00 grep --color<span class=o>=</span>auto gedit
+</span></span></code></pre></td></tr></table></div></div><p> ps 命令是 Process Status 的缩写，功能比较强大，参数非常多，尤其与其他命令组合时可以完成很复杂的操作。
+ ps -ef |grep hzqtest 是常见用法之一，
+ e：表示列出所有进程，f：表示输出完整格式，
+ grep hzqtest：表示过滤筛选 “hzqtest” 关键字。
+ 上面例子中，第一列：用户名，第二列：PID，第三列：父级 PID，最后一列：命令名称或路径</p><h2 id=5关闭后台任务的命令>5、关闭后台任务的命令</h2><p> 处于 linux 后台的任务有几种关闭方式：任务运行完毕自行退出；通过交互方式退出（包括传入参数对话，界面操作，终端 ctrl+c 等）；通过进程管理工具杀掉；关闭系统退出等。</p><p><strong>kill 命令：属于进程管理工具，功能：杀掉进程。</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>2<span class=o>]</span>   已停止               nohup firefox
+</span></span><span class=line><span class=cl><span class=o>[</span>3<span class=o>]</span>-  已停止               nohup sudo gedit
+</span></span><span class=line><span class=cl><span class=o>[</span>4<span class=o>]</span>+  已停止               nohup sudo gedit
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>kill</span> -9 %2
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>2<span class=o>]</span>   已停止               nohup firefox
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>2<span class=o>]</span>   已杀死               nohup firefox
+</span></span><span class=line><span class=cl><span class=o>[</span>3<span class=o>]</span>-  已停止               nohup sudo gedit
+</span></span><span class=line><span class=cl><span class=o>[</span>4<span class=o>]</span>+  已停止               nohup sudo gedit
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>3<span class=o>]</span>-  已停止               nohup sudo gedit
+</span></span><span class=line><span class=cl><span class=o>[</span>4<span class=o>]</span>+  已停止               nohup sudo gedit
+</span></span></code></pre></td></tr></table></div></div><ul><li>1）上面的例子中先通过 jobs 命令查看任务号，然后通过任务号 %N 杀死进程！最后再次查询发现 jobs 中的任务已经减少了。</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ ps -ef <span class=p>|</span>grep gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3791</span>   <span class=m>2566</span>  <span class=m>0</span> 00:29 pts/0    00:00:00 sudo gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3792</span>   <span class=m>3791</span>  <span class=m>0</span> 00:29 pts/0    00:00:00 gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3802</span>   <span class=m>2566</span>  <span class=m>0</span> 00:30 pts/0    00:00:00 sudo gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3803</span>   <span class=m>3802</span>  <span class=m>0</span> 00:30 pts/0    00:00:00 gedit
+</span></span><span class=line><span class=cl>hzq        <span class=m>3829</span>   <span class=m>2566</span>  <span class=m>0</span> 00:59 pts/0    00:00:00 grep --color<span class=o>=</span>auto gedit
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ sudo <span class=nb>kill</span> -9 <span class=m>3791</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>sudo<span class=o>]</span> hzq 的密码：
+</span></span><span class=line><span class=cl><span class=o>[</span>3<span class=o>]</span>-  已杀死               nohup sudo gedit
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ ps -ef <span class=p>|</span>grep gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3792</span>    <span class=m>912</span>  <span class=m>0</span> 00:29 pts/0    00:00:00 gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3802</span>   <span class=m>2566</span>  <span class=m>0</span> 00:30 pts/0    00:00:00 sudo gedit
+</span></span><span class=line><span class=cl>root       <span class=m>3803</span>   <span class=m>3802</span>  <span class=m>0</span> 00:30 pts/0    00:00:00 gedit
+</span></span><span class=line><span class=cl>hzq        <span class=m>3835</span>   <span class=m>2566</span>  <span class=m>0</span> 01:01 pts/0    00:00:00 grep --color<span class=o>=</span>auto gedit
+</span></span></code></pre></td></tr></table></div></div><ul><li>2）上面的例子中先通过 ps 命令查看任务 PID，然后通过 PID 杀掉进程，注意上面例子中使用了管理员权限。</li><li>3）如果你的任务还没有转到后台运行，那么直接 Ctrl+c 就可以终止了。或者你也可以将后台任务转到前台然后执行 ctrl+c 来终止。该方法可参考下面举例。</li></ul><h2 id=6前后台任务的转换>6、前后台任务的转换</h2><p><strong>1）fg 命令</strong>
+功能：将后台中的任务调至前台并继续运行。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>-  运行中               nohup gedit <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>2<span class=o>]</span>+  运行中               nohup ./hzqtest8.sh <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>fg</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>nohup gedit
+</span></span></code></pre></td></tr></table></div></div><p>先通过上面介绍的 jobs 命令查看任务信息，然后用 fg N 将选中的任务调到前台，跳到前台之后终端界面被阻塞，此时终端不能做别的事情了。</p><p><strong>2）Ctrl + z 命令</strong>
+功能：将正在前台执行的命令作业放到后台，并冻结运行状态。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ ./hzqtest8.sh
+</span></span><span class=line><span class=cl>2019年 10月 27日 星期日 01:53:31 CST
+</span></span><span class=line><span class=cl>2019年 10月 27日 星期日 01:53:33 CST
+</span></span><span class=line><span class=cl>^Z
+</span></span><span class=line><span class=cl><span class=o>[</span>3<span class=o>]</span>+  已停止               ./hzqtest8.sh
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>3<span class=o>]</span>+  已停止               ./hzqtest8.sh
+</span></span></code></pre></td></tr></table></div></div><p>例子中先正常运行任务脚本，可以看到刚开始是正常输出的，执行 ctrl+z 之后，提示任务已停止，用 jobs 查看任务已在后台并处于停止状态。</p><p><strong>3）bg 命令</strong>
+功能：将后台冻结的任务再次运行起来，运行后任务还在后台。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>jobs</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>+  已停止               ./hzqtest8.sh
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ <span class=nb>bg</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>+ ./hzqtest8.sh <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>hzq@ubuntu:~$ 2019年 10月 27日 星期日 01:58:17 CST
+</span></span><span class=line><span class=cl>2019年 10月 27日 星期日 01:58:19 CST
+</span></span><span class=line><span class=cl>2019年 10月 27日 星期日 01:58:21 CST
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>1<span class=o>]</span>+  已完成               ./hzqtest8.sh
+</span></span></code></pre></td></tr></table></div></div><p>上面例子中先用 jobs 查看有一个任务处于后台停止状态，执行 bg 1 之后任务继续在后台运行，并继续输出剩余信息。</p></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=[".main-article",".widget--toc"];e.forEach(e=>{const t=document.querySelector(e);t&&renderMathInElement(t,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})})</script></article><script src=//cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js></script><div id=tcomment></div><style>.twikoo{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}:root[data-scheme=dark]{--twikoo-body-text-color-main:rgba(255, 255, 255, 0.9);--twikoo-body-text-color:rgba(255, 255, 255, 0.7)}.twikoo .el-input-group__prepend,.twikoo .tk-action-icon,.twikoo .tk-submit-action-icon,.twikoo .tk-time,.twikoo .tk-comments-no,.twikoo .tk-comments-count{color:var(--twikoo-body-text-color)}.twikoo .el-input__inner,.twikoo .el-textarea__inner,.twikoo .tk-preview-container,.twikoo .tk-content,.twikoo .tk-nick,.twikoo .tk-send,.twikoo .tk-comments-no,.twikoo .el-input__count,.twikoo .tk-submit-action-icon{color:var(--twikoo-body-text-color-main)!important}.twikoo .el-button{color:var(--twikoo-body-text-color)!important}.twikoo .el-input__count{color:var(--twikoo-body-text-color)!important}.OwO .OwO-body{background-color:var(--body-background)!important;color:var(--body-text-color)!important}</style><script>twikoo.init({envId:"https://comment.961110.xyz:10010",el:"#tcomment",lang:"zh-CN"})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 JasonChio</section><section class=powerby>间歇性更新 持续性尝试更新<br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

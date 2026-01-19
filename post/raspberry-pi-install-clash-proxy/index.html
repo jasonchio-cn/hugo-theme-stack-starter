@@ -1,0 +1,158 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="树莓派安装Clash代理服务的完整教程"><title>树莓派安装Clash代理</title><link rel=canonical href=https://blog.961110.xyz:10010/post/raspberry-pi-install-clash-proxy/><link rel=stylesheet href=/scss/style.min.833d6eed45de56f48306bf57268d5b8cdfc8a60e8e7bdc99810464fcd033f7c6.css><meta property='og:title' content="树莓派安装Clash代理"><meta property='og:description' content="树莓派安装Clash代理服务的完整教程"><meta property='og:url' content='https://blog.961110.xyz:10010/post/raspberry-pi-install-clash-proxy/'><meta property='og:site_name' content='积跬步行千里'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:published_time' content='2021-10-22T00:00:00+08:00'><meta property='article:modified_time' content='2021-12-03T16:22:00+08:00'><meta name=twitter:title content="树莓派安装Clash代理"><meta name=twitter:description content="树莓派安装Clash代理服务的完整教程"><script async src="https://www.googletagmanager.com/gtag/js?id=G-YQ9F51F77Q"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-YQ9F51F77Q")}</script></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=https://image.961110.xyz:10010/i/2025/03/avatar-%e8%87%aa%e5%ae%9a%e4%b9%89-1.webp width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🍥</span></figure><div class=site-meta><h1 class=site-name><a href=/>积跬步行千里</a></h1><h2 class=site-description>JasonChio</h2></div></header><ol class=menu-social><li><a href=https://space.bilibili.com/30240401 target=_blank title=Bilibili rel=me><svg class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M10 14a3.5 3.5.0 005 0l4-4a3.5 3.5.0 00-5-5l-.5.5"/><path d="M14 10a3.5 3.5.0 00-5 0l-4 4a3.5 3.5.0 005 5l.5-.5"/></svg></a></li><li><a href=mailto:zyb389120217@gmail.com target=_blank title=Email rel=me><svg class="icon icon-tabler icon-tabler-messages" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M21 14l-3-3h-7a1 1 0 01-1-1V4a1 1 0 011-1h9a1 1 0 011 1v10"/><path d="M14 15v2a1 1 0 01-1 1H6l-3 3V11a1 1 0 011-1h2"/></svg></a></li><li><a href=https://github.com/jasonchio-cn target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li></ol><ol class=menu id=main-menu><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#安装>安装</a><ol><li><a href=#下载>下载</a></li><li><a href=#解压并安装>解压并安装</a></li><li><a href=#配置>配置</a></li><li><a href=#配置开机启动>配置开机启动</a></li><li><a href=#管理>管理</a></li><li><a href=#开启代理>开启代理</a></li></ol></li><li><a href=#参考资料>参考资料</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/post/raspberry-pi-install-clash-proxy/>树莓派安装Clash代理</a></h2><h3 class=article-subtitle>树莓派安装Clash代理服务的完整教程</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published datetime=2021-10-22T00:00:00+08:00>2021-10-22</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 3 分钟</time></div></footer></div></header><section class=article-content><blockquote><p>更新时间：2021-12-03 16:22
+感谢 shgm 提出的意见。</p></blockquote><h2 id=安装>安装</h2><h3 id=下载>下载</h3><p>到 <a class=link href=https://github.com/Dreamacro/clash/releases target=_blank rel=noopener>官方Releases页面</a> 下，选择合适的版本下载。</p><p>我这里下载的是 <a class=link href=https://github.com/Dreamacro/clash/releases/download/v1.7.1/clash-linux-armv8-v1.7.1.gz target=_blank rel=noopener>clash-linux-armv8-v1.7.1.gz</a></p><h3 id=解压并安装>解压并安装</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>wget -O clash-linux-armv8-v1.7.1.gz https://github.com/Dreamacro/clash/releases/download/v1.7.1/clash-linux-armv8-v1.7.1.gz
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>gzip -dv clash-linux-armv8-v1.7.1.gz
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>sudo mv clash-linux-armv8-v1.7.1 /usr/local/bin/clash
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>sudo chmod a+x /usr/local/bin/clash
+</span></span></code></pre></td></tr></table></div></div><h3 id=配置>配置</h3><p>首次运行，初始化一下 config 目录
+输入</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>clash
+</span></span></code></pre></td></tr></table></div></div><p>输出如下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>INFO<span class=o>[</span>0000<span class=o>]</span> Can<span class=s1>&#39;t find config, create a initial config file
+</span></span></span><span class=line><span class=cl><span class=s1>INFO[0000] Can&#39;</span>t find MMDB, start download
+</span></span><span class=line><span class=cl>INFO<span class=o>[</span>0005<span class=o>]</span> Mixed<span class=o>(</span>http+socks<span class=o>)</span> proxy listening at: 127.0.0.1:7890
+</span></span></code></pre></td></tr></table></div></div><p>然后 ctrl+c 终止运行</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 下载配置文件（如果是root用户安装clash的那么配置文件应放在/root/.config/clash目录下）</span>
+</span></span><span class=line><span class=cl>wget -O /home/pi/.config/clash/config.yaml <span class=s2>&#34;https://xxxx.xx/xxx&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>这里的 <code>https://xxxx.xx/xxx</code> 指的是购买渠道提供的配置文件链接（一般会有一个一键订阅的按钮，找一下哪里有复制订阅地址的按钮）。我电脑上也在用，所以直接复制过来了。<strong>名字一定要是 config.yaml</strong>，不然会读取不了配置。</p><div class=table-wrapper><table><tr><td><center><img src=https://images.961110.xyz:5001/i/2021/12/03/9852a787ca4a9b1526c374db92b5e3c7.png>
+图1 购买渠道订阅地址</center></td><td><center><img src=https://images.961110.xyz:5001/i/2021/10/22/clash.png style=zoom:50%>
+图2 本机 Clash 已有链接</center></td></tr></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>less /home/pi/.config/clash/config.yaml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 输出</span>
+</span></span><span class=line><span class=cl>port: <span class=m>7890</span>
+</span></span><span class=line><span class=cl>socks-port: <span class=m>7891</span>
+</span></span><span class=line><span class=cl>allow-lan: <span class=nb>false</span>
+</span></span><span class=line><span class=cl>mode: Rule
+</span></span><span class=line><span class=cl>log-level: info
+</span></span><span class=line><span class=cl>external-controller: 0.0.0.0:9091
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># :q 退出</span>
+</span></span></code></pre></td></tr></table></div></div><p>port 为代理的端口
+allow-lan 为是否开启局域网访问
+external-controller 为 Clash 控制端口与允许访问该端口的设备</p><p><strong>这里 mode 先设置为 Global，方便之后测试。</strong></p><h3 id=配置开机启动>配置开机启动</h3><p>官方教程：https://github.com/Dreamacro/clash/wiki/clash-as-a-daemon#systemd</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># 将配置文件复制到/etc/clash文件夹中</span>
+</span></span><span class=line><span class=cl>sudo mkdir /etc/clash
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>sudo cp /home/pi/.config/clash/config.yaml /etc/clash/
+</span></span><span class=line><span class=cl><span class=c1># 虽然前面的步骤中没见过这个文件，但是它是自动生成的</span>
+</span></span><span class=line><span class=cl>sudo cp /home/pi/.config/clash/Country.mmdb /etc/clash/
+</span></span></code></pre></td></tr></table></div></div><p>在systemd配置目录中新建配置文件</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo vim /etc/systemd/system/clash.service
+</span></span></code></pre></td></tr></table></div></div><p>输入一下内容</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>Unit<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>Description</span><span class=o>=</span>Clash daemon, A rule-based proxy in Go.
+</span></span><span class=line><span class=cl><span class=nv>After</span><span class=o>=</span>network.target
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>Service<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>Type</span><span class=o>=</span>simple
+</span></span><span class=line><span class=cl><span class=nv>Restart</span><span class=o>=</span>always
+</span></span><span class=line><span class=cl><span class=nv>ExecStart</span><span class=o>=</span>/usr/local/bin/clash -d /etc/clash
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>[</span>Install<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=nv>WantedBy</span><span class=o>=</span>multi-user.target
+</span></span></code></pre></td></tr></table></div></div><p>启动开机自启</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo systemctl <span class=nb>enable</span> clash
+</span></span></code></pre></td></tr></table></div></div><p>启动</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo systemctl start clash
+</span></span></code></pre></td></tr></table></div></div><p>检查状态</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ ssystemctl status clash
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>pi@pi-desktop:~$ systemctl status clash
+</span></span><span class=line><span class=cl>● clash.service - Clash daemon, A rule-based proxy in Go.
+</span></span><span class=line><span class=cl>     Loaded: loaded <span class=o>(</span>/etc/systemd/system/clash.service<span class=p>;</span> enabled<span class=p>;</span> vendor preset: enable&gt;
+</span></span><span class=line><span class=cl>     Active: active <span class=o>(</span>running<span class=o>)</span> since Fri 2021-12-03 16:09:24 CST<span class=p>;</span> 4min 49s ago
+</span></span><span class=line><span class=cl>   Main PID: <span class=m>134991</span> <span class=o>(</span>clash<span class=o>)</span>
+</span></span><span class=line><span class=cl>      Tasks: <span class=m>10</span> <span class=o>(</span>limit: 8895<span class=o>)</span>
+</span></span><span class=line><span class=cl>     Memory: 10.1M
+</span></span><span class=line><span class=cl>        CPU: 2.999s
+</span></span><span class=line><span class=cl>     CGroup: /system.slice/clash.service
+</span></span><span class=line><span class=cl>             └─134991 /usr/local/bin/clash -d /etc/clash
+</span></span></code></pre></td></tr></table></div></div><p><code>Active: active (running)</code> 表明 Clash 已经运行起来了。</p><h3 id=管理>管理</h3><p>因为 Clash 没有原生的管理方式，需要通过以下网站可以管理 Clash</p><p><a class=link href=http://clash.razord.top/#/settings target=_blank rel=noopener>http://clash.razord.top/#/settings</a></p><img src=https://images.961110.xyz:5001/i/2021/10/22/clashe8aa2ec8d51bee0e.png alt=image-20211022174624218 style=zoom:50%><p>Host 填写树莓派的 IP，端口填写 clash 配置文件中<code>external-controller</code>填写的端口。</p><img src=https://images.961110.xyz:5001/i/2021/10/22/clash49c32381cceff753.png alt=image-20211022174803075 style=zoom:50%><p>在设置页面也可以控制全局代理还是规则代理还是直连，配置完成后进入代理界面，选择可用的节点。</p><h3 id=开启代理>开启代理</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>export</span> <span class=nv>http_proxy</span><span class=o>=</span>127.0.0.1:7890
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>https_proxy</span><span class=o>=</span>127.0.0.1:7890
+</span></span></code></pre></td></tr></table></div></div><p>取消代理</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>unset</span> http_proxy
+</span></span><span class=line><span class=cl><span class=nb>unset</span> https_proxy
+</span></span></code></pre></td></tr></table></div></div><p>验证代理是否成功</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>curl www.google.com -I
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>HTTP/1.1 <span class=m>200</span> OK
+</span></span><span class=line><span class=cl>Transfer-Encoding: chunked
+</span></span><span class=line><span class=cl>Cache-Control: private
+</span></span><span class=line><span class=cl>Connection: keep-alive
+</span></span></code></pre></td></tr></table></div></div><p><strong>返回 200 说明配置成功</strong>。</p><p>如果提示未安装 curl，输入以下命令</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt-get update
+</span></span><span class=line><span class=cl>sudo apt install curl
+</span></span></code></pre></td></tr></table></div></div><p>上面的配置方式是临时的，可开关的配置可以参考 <a class=link href=https://blog.961110.xyz/posts/60538.html#%E7%BB%88%E7%AB%AF%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE target=_blank rel=noopener>VMware虚拟机使用主机代理</a> ，IP 改为 127.0.0.1</p><h2 id=参考资料>参考资料</h2><ol><li><a class=link href=http://events.jianshu.io/p/f0daa2d9eae6 target=_blank rel=noopener>树莓派4B 通过Clash实现代理 - 简书 (jianshu.io)</a></li><li><a class=link href=https://www.cnblogs.com/rogunt/p/15127947.html target=_blank rel=noopener>在Linux终端中使用Clash（clash for linux) - Rogunt - 博客园 (cnblogs.com)</a></li></ol></section><footer class=article-footer><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section><section class=article-lastmod><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<span>最后更新于 2021-12-03 16:22:00</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=[".main-article",".widget--toc"];e.forEach(e=>{const t=document.querySelector(e);t&&renderMathInElement(t,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})})</script></article><script src=//cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js></script><div id=tcomment></div><style>.twikoo{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}:root[data-scheme=dark]{--twikoo-body-text-color-main:rgba(255, 255, 255, 0.9);--twikoo-body-text-color:rgba(255, 255, 255, 0.7)}.twikoo .el-input-group__prepend,.twikoo .tk-action-icon,.twikoo .tk-submit-action-icon,.twikoo .tk-time,.twikoo .tk-comments-no,.twikoo .tk-comments-count{color:var(--twikoo-body-text-color)}.twikoo .el-input__inner,.twikoo .el-textarea__inner,.twikoo .tk-preview-container,.twikoo .tk-content,.twikoo .tk-nick,.twikoo .tk-send,.twikoo .tk-comments-no,.twikoo .el-input__count,.twikoo .tk-submit-action-icon{color:var(--twikoo-body-text-color-main)!important}.twikoo .el-button{color:var(--twikoo-body-text-color)!important}.twikoo .el-input__count{color:var(--twikoo-body-text-color)!important}.OwO .OwO-body{background-color:var(--body-background)!important;color:var(--body-text-color)!important}</style><script>twikoo.init({envId:"https://comment.961110.xyz:10010",el:"#tcomment",lang:"zh-CN"})</script><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 JasonChio</section><section class=powerby>间歇性更新 持续性尝试更新<br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.33.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
