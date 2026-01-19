@@ -1,47 +1,210 @@
-<img align="right" width="150" alt="logo" src="https://user-images.githubusercontent.com/5889006/190859553-5b229b4f-c476-4cbd-928f-890f5265ca4c.png">
+# JasonChio 的 Hugo 博客配置仓库
 
-# Hugo Theme Stack Starter Template
+这是基于 [Hugo Theme Stack Starter Template](https://github.com/CaiJimmy/hugo-theme-stack-starter) 修改的个人博客配置仓库。
 
-This is a quick start template for [Hugo theme Stack](https://github.com/CaiJimmy/hugo-theme-stack). It uses [Hugo modules](https://gohugo.io/hugo-modules/) feature to load the theme.
+## 📝 工作流
 
-It comes with a basic theme structure and configuration. GitHub action has been set up to deploy the theme to a public GitHub page automatically. Also, there's a cron job to update the theme automatically everyday.
+```
+ObsidianVault (内容来源)
+      ↓ (CI/CD)
+hugo-theme-stack-starter (配置仓库)
+      ↓ (部署)
+jasonchio-cn.github.io (GitHub Pages)
+```
 
-## Video Tutorial
+## 🚀 功能特性
 
-In case you got lost during the setup process, here's a video tutorial that setups a new Hugo site using this template, and deploys it to GitHub Pages: https://www.youtube.com/watch?v=8qDdQQ6Ifxo
-
-## Get started
-
-1. Click *Use this template*, and create your repository as `<username>.github.io` on GitHub. (You can also use a different repository name, but then the resulting website will be available at `https://<username>.github.io/<repository-name>`. )
-![Step 1](https://user-images.githubusercontent.com/5889006/156916624-20b2a784-f3a9-4718-aa5f-ce2a436b241f.png)
-
-2. Once the repository is created, create a GitHub codespace associated with it.
-![Create codespace](https://user-images.githubusercontent.com/5889006/156916672-43b7b6e9-4ffb-4704-b4ba-d5ca40ffcae7.png)
-
-3. While waiting for the codespace to be created, go to `Settings` -> `Pages` of your newly created repository, and set `Build and deployment` -> `Source` to `GitHub Actions`.
-![Change build and deployment source](https://github.com/user-attachments/assets/192459bf-25d8-441e-8029-c108d789e449)
-
-4. After the codespace is created, you can test that the site is built successfully by running `hugo server` in the terminal and see your new site in action. 
-
-5. Check `config` folder for the configuration files. You can edit them to suit your needs. Make sure to update the `baseurl` property in `config/_default/config.toml` to your site's URL. For example, if your new repository is named `my-blog`, then the `baseurl` should be `https://<username>.github.io/my-blog/`.
-
-6. Once you're done editing the site, just commit it and push it. GitHub action will deploy the site automatically to GitHub page asociated with the repository.
+- ✅ **Hugo Theme Stack v3**：现代化的 Hugo 博客主题
+- ✅ **Go Modules 主题管理**：自动化的主题更新
+- ✅ **GitHub Actions CI/CD**：自动构建和部署
+- ✅ **内容分离**：来自 ObsidianVault 的 Markdown 内容
+- ✅ **自动部署**：推送到 master 分支自动触发部署
 
 ---
 
-In case you don't want to use GitHub codespace, you can also run this template in your local machine. **You need to install Git, Go and Hugo extended locally.** For more information, check official Hugo documentation: https://gohugo.io/installation/
+## 📖 快速开始
 
-## Update theme manually
+### 1. 仓库说明
 
-Run:
+本仓库包含：
+- `config/_default/`：Hugo 配置文件
+- `.github/workflows/`：自动化工作流（部署 + 主题更新）
+- `assets/`：自定义资源（图标、样式、脚本）
+- `static/`：静态资源文件
+
+### 2. 配置 Secrets
+
+在仓库设置中添加以下 Secrets：
+
+| Secret 名称 | 说明 | 示例 |
+|------------|------|------|
+| `PAT_TOKEN` | GitHub Personal Access Token | 用于访问 ObsidianVault 私有仓库 |
+
+**获取 PAT Token**：
+1. 访问 [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens)
+2. 创建新 token，勾选 `repo` 权限
+3. 在 [本仓库 Settings → Secrets and variables → Actions](https://github.com/jasonchio-cn/hugo-theme-stack-starter/settings/secrets/actions) 中添加
+
+### 3. 配置 GitHub Pages
+
+1. 访问 [Settings → Pages](https://github.com/jasonchio-cn/hugo-theme-stack-starter/settings/pages)
+2. 设置：
+   - **Source**: Deploy from a branch
+   - **Branch**: `gh-pages` / `root`
+
+---
+
+## 🛠️ 配置文件说明
+
+### 网站基础配置 (`config/_default/config.toml`)
+- `baseurl`: 网站地址
+- `languageCode`: 语言代码
+- `title`: 网站标题
+- `theme`: 主题（使用 Go Modules）
+
+### 主题参数 (`config/_default/params.toml`)
+- 侧边栏、头像、社交媒体
+- 评论系统（Twikoo）
+- 小部件配置
+- 颜色主题
+
+### 菜单配置 (`config/_default/menu.toml`)
+- 主导航菜单
+- 社交媒体链接
+
+---
+
+## 🔄 工作流说明
+
+### 自动部署 (`.github/workflows/deploy.yml`)
+
+触发条件：
+- 推送到 `master` 分支
+- 创建 Pull Request
+
+流程：
+1. Checkout 配置仓库
+2. Checkout 内容仓库（ObsidianVault）
+3. 合并内容到 `content/` 目录
+4. 安装 Hugo
+5. 下载主题依赖
+6. 构建网站（`hugo --minify --gc`）
+7. 部署到 `gh-pages` 分支
+
+### 自动主题更新 (`.github/workflows/update-theme.yml`)
+
+触发条件：
+- 每天 UTC 00:00
+- 手动触发（在 Actions 页面点击 "Run workflow"）
+
+流程：
+1. 使用 `hugo mod get -u` 更新主题
+2. 使用 `hugo mod tidy` 清理依赖
+3. 提交变更
+
+---
+
+## 🧪 本地开发
+
+### 环境要求
+- Git
+- Go 1.17+
+- Hugo Extended (最新版本)
+
+### 克隆仓库
+```bash
+git clone https://github.com/jasonchio-cn/hugo-theme-stack-starter.git
+cd hugo-theme-stack-starter
+```
+
+### 运行开发服务器
+```bash
+hugo server
+```
+
+访问 `http://localhost:1313` 查看效果
+
+### 本地预览来自 ObsidianVault 的内容
+```bash
+# 克隆 ObsidianVault 仓库到本地
+git clone https://github.com/jasonchio-cn/ObsidianVault.git ../ObsidianVault
+
+# 复制 content 目录
+cp -r ../ObsidianVault/content .
+
+# 启动开发服务器
+hugo server
+```
+
+---
+
+## 📝 内容管理
+
+### 内容来源
+
+博客内容来自 [ObsidianVault](https://github.com/jasonchio-cn/ObsidianVault) 仓库的 `content/` 目录。
+
+### 内容结构
+
+```
+content/
+├── post/              # 博客文章
+│   ├── hello-world/
+│   └── ...
+├── page/              # 独立页面
+│   └── about/
+└── categories/        # 分类页面
+```
+
+### 文章 Front Matter 示例
+
+```markdown
+---
+title: "文章标题"
+date: 2025-01-19T00:00:00+08:00
+lastmod: 2025-01-19T00:00:00+08:00
+draft: false
+authors:
+  - JasonChio
+categories:
+  - 技术
+tags:
+  - Hugo
+  - 博客
+description: "文章描述（可选）"
+featuredImage: "/images/featured.jpg"  # 可选
+---
+```
+
+---
+
+## 🔧 手动更新主题
 
 ```bash
 hugo mod get -u github.com/CaiJimmy/hugo-theme-stack/v4
 hugo mod tidy
 ```
 
-> This starter template has been configured with `v4` version of theme. Due to the limitation of Go module, once the `v4` or up version of theme is released, you need to update the theme manually. (Modifying `config/module.toml` file)
+---
 
-## Deploy to another static page hostings
+## 📊 网站统计
 
-Check official Hugo documentation: https://gohugo.io/host-and-deploy/
+- [Google Analytics](https://analytics.google.com/) ID: `G-YQ9F51F77Q`
+
+---
+
+## 🌐 相关链接
+
+- **博客**: https://blog.961110.xyz:10010
+- **配置仓库**: https://github.com/jasonchio-cn/hugo-theme-stack-starter
+- **内容仓库**: https://github.com/jasonchio-cn/ObsidianVault
+- **deployed 仓库**: https://github.com/jasonchio-cn/jasonchio-cn.github.io
+- **主题**: https://github.com/CaiJimmy/hugo-theme-stack
+
+---
+
+## 📄 许可证
+
+本项目基于 [MIT License](LICENSE) 开源。
+
+主题版权归属 [CaiJimmy](https://github.com/CaiJimmy)。
