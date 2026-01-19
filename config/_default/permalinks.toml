@@ -1,3 +1,10 @@
 # Permalinks format of each content section
+#
+# Hugo v0.150+ uses permalink configuration by kind.
+# Supported kinds are: page, section, taxonomy, term.
+#
+# For Stack starter, we customize the permalink pattern for section pages.
+
+[section]
 post = "/p/:slug/"
 page = "/:slug/"
