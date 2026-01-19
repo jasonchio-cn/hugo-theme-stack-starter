@@ -29,7 +29,8 @@ name = "Bilibili"
 url = "https://space.bilibili.com/30240401"
 
 [social.params]
-icon = "video"
+# The Stack theme doesn't include video.svg by default; use an existing icon.
+icon = "link"
 
 [[social]]
 identifier = "email"
@@ -37,4 +38,5 @@ name = "Email"
 url = "mailto:zyb389120217@gmail.com"
 
 [social.params]
-icon = "email"
+# The Stack theme doesn't include email.svg by default; use an existing icon.
+icon = "messages"
