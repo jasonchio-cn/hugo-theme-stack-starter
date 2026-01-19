@@ -1,11 +1,12 @@
 # ============================================================================
 # 多语言配置
 # ============================================================================
-# 注意：defaultContentLanguage 与 hasCJKLanguage 必须是顶级配置，不能放在 [languages] 下面
+# Hugo 的 languages 配置文件结构：语言代码作为顶级 key（参考 Stack starter 的 _languages.toml）
+# 不能写成 [languages.xx]，否则 defaultContentLanguage 无法匹配。
 
-[languages]
-[languages.zh-cn]
+[zh-cn]
 languageCode = "zh-cn"
 languageName = "中文"
+languagedirection = "ltr"
 title = "积跬步行千里"
 weight = 1
