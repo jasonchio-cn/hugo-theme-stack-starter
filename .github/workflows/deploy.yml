@@ -1,4 +1,4 @@
-name: Deploy to Github Pages
+name: Deploy to GitHub Pages Repository
 
 on:
     push:
@@ -32,36 +32,31 @@ jobs:
               run: |
                   # 创建 content 目录结构
                   mkdir -p content/post
-                  
+
                   # 检查是否存在旧的 content 目录并备份
                   if [ -d "content" ]; then
                       echo "备份现有 content 目录 → content.bak"
                       rm -rf content.bak
                       mv content content.bak
                   fi
-                  
+
                   # 重新创建 content 目录结构
                   mkdir -p content/post
-                  
+
                   # 从 ObsidianVault 根目录同步 Markdown 文件到 content/post/
                   echo "📝 从 ObsidianVault 根目录同步 Markdown 文件..."
                   find content-source -maxdepth 1 -name "*.md" -exec cp {} content/post/ \;
-                  
+
                   # 统计同步的文件数量
                   file_count=$(find content-source -maxdepth 1 -name "*.md" | wc -l)
                   echo "✓ 同步了 $file_count 个 Markdown 文件"
-                  
+
                   # 同步资源目录（如果存在）
                   if [ -d "content-source/assets" ]; then
                       echo "📁 同步 assets 目录..."
                       cp -r content-source/assets content/
                   fi
-                  
-                  if [ -d "content-source/resources" ]; then
-                      echo "📁 同步 resources 目录..."
-                      cp -r content-source/resources content/
-                  fi
-                  
+
                   echo "✓ 内容同步完成"
 
             - name: Cache Hugo resources
@@ -90,9 +85,14 @@ jobs:
               run: hugo --minify --gc --configDir config
 
             - name: Deploy 🚀
+              if: github.event_name != 'pull_request'
               uses: JamesIves/github-pages-deploy-action@v4
               with:
-                  branch: gh-pages
+                  token: ${{ secrets.PAT_TOKEN }}
+                  repository-name: jasonchio-cn/jasonchio-cn.github.io
+                  branch: main
                   folder: public
                   clean: true
+                  clean-exclude: |
+                      README.md
                   single-commit: true
