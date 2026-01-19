@@ -69,12 +69,12 @@ jobs:
             cp -r content-source/content/* content/ 2>/dev/null || true
           fi
 
-          # 从 ObsidianVault 根目录同步 Markdown 文件到 content/post/
-          echo "📝 从 ObsidianVault 根目录同步 Markdown 文件..."
-          find content-source -maxdepth 1 -name "*.md" -exec cp {} content/post/ \;
+          # 从 ObsidianVault 根目录同步 Markdown 文件到 content/post/（排除 README.md）
+          echo "📝 从 ObsidianVault 根目录同步 Markdown 文件（排除 README.md）..."
+          find content-source -maxdepth 1 -type f -name "*.md" ! -iname "README.md" -exec cp {} content/post/ \;
 
           # 统计同步的文件数量
-          file_count=$(find content-source -maxdepth 1 -name "*.md" 2>/dev/null | wc -l)
+          file_count=$(find content-source -maxdepth 1 -type f -name "*.md" ! -iname "README.md" | wc -l)
           echo "✓ 同步了 $file_count 个 Markdown 文件"
 
           # 同步资源目录（如果存在）
