@@ -1,28 +1,40 @@
 # ============================================================================
-# 导航菜单
+# Menus
 # ============================================================================
+# This file follows Hugo's "menu" configuration when using config directory.
+# Each top-level array name (e.g. [[main]], [[social]]) becomes a menu.
+# Do NOT wrap these under [menu.*] here, otherwise Hugo may decode them as maps
+# and fail when it expects arrays of menu entries.
 
-# 主菜单（空数组移除所有）
-[menu.main]
+# Main menu (optional)
+# [[main]]
+# identifier = "home"
+# name = "Home"
+# url = "/"
+# [main.params]
+# icon = "home"
 
-# 社交菜单
-[[menu.social]]
+# Social menu
+[[social]]
 identifier = "github"
 name = "GitHub"
 url = "https://github.com/jasonchio-cn"
-[menu.social.params]
+
+[social.params]
 icon = "brand-github"
 
-[[menu.social]]
+[[social]]
 identifier = "bilibili"
 name = "Bilibili"
 url = "https://space.bilibili.com/30240401"
-[menu.social.params]
+
+[social.params]
 icon = "video"
 
-[[menu.social]]
+[[social]]
 identifier = "email"
 name = "Email"
 url = "mailto:zyb389120217@gmail.com"
-[menu.social.params]
+
+[social.params]
 icon = "email"
