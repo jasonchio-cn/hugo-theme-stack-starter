@@ -50,8 +50,7 @@ envId = "https://comment.961110.xyz:10010"
 lang = "zh-CN"
 
 # 小部件配置
-[widgets.homepage]
-[widgets.homepage.type]
+[[widgets.homepage]]
 type = "search"
 
 [[widgets.homepage]]
