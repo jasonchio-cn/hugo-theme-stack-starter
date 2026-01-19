@@ -1,12 +1,15 @@
-# Related contents configuration
+# ============================================================================
+# 相关文章配置
+# ============================================================================
+[related]
 includeNewer = true
 threshold = 60
 toLower = false
 
-[[indices]]
+[[related.indices]]
 name = "tags"
 weight = 100
 
-[[indices]]
+[[related.indices]]
 name = "categories"
 weight = 200
