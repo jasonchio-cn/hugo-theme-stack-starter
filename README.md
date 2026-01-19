@@ -1,16 +1,4 @@
-# JasonChio 的 Hugo 博客配置仓库
-
-这是基于 [Hugo Theme Stack Starter Template](https://github.com/CaiJimmy/hugo-theme-stack-starter) 修改的个人博客配置仓库。
-
-## 📝 工作流
-
-```
-ObsidianVault (内容来源)
-      ↓ (CI/CD)
-hugo-theme-stack-starter (配置仓库)
-      ↓ (部署)
-jasonchio-cn.github.io (GitHub Pages)
-```
+# hugo-theme-stack-starter
 
 ## 🚀 功能特性
 
