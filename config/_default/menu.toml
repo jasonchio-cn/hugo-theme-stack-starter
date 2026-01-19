@@ -1,24 +1,28 @@
-# Configure main menu and social menu
-#[[main]]
-#identifier = "home"
-#name = "Home"
-#url = "/"
-#[main.params]
-#icon = "home"
-#newtab = true
+# ============================================================================
+# 导航菜单
+# ============================================================================
 
-[[social]]
+# 主菜单（空数组移除所有）
+[menu.main]
+
+# 社交菜单
+[[menu.social]]
 identifier = "github"
 name = "GitHub"
-url = "https://github.com/CaiJimmy/hugo-theme-stack"
-
-[social.params]
+url = "https://github.com/jasonchio-cn"
+[menu.social.params]
 icon = "brand-github"
 
-[[social]]
-identifier = "twitter"
-name = "Twitter"
-url = "https://twitter.com"
+[[menu.social]]
+identifier = "bilibili"
+name = "Bilibili"
+url = "https://space.bilibili.com/30240401"
+[menu.social.params]
+icon = "video"
 
-[social.params]
-icon = "brand-twitter"
+[[menu.social]]
+identifier = "email"
+name = "Email"
+url = "mailto:zyb389120217@gmail.com"
+[menu.social.params]
+icon = "email"
