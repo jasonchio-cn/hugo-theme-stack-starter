@@ -11,14 +11,42 @@ jobs:
         runs-on: ubuntu-latest
 
         permissions:
-            # Give the default GITHUB_TOKEN write permission to commit and push the
-            # added or changed files to the repository.
             contents: write
 
         steps:
-            - uses: actions/checkout@v4
+            - name: Checkout config repository
+              uses: actions/checkout@v4
               with:
                   fetch-depth: 0
+
+            - name: Checkout content repository (ObsidianVault)
+              uses: actions/checkout@v4
+              with:
+                  repository: jasonchio-cn/ObsidianVault
+                  path: content-source
+                  token: ${{ secrets.PAT_TOKEN }}
+
+            - name: Merge content from ObsidianVault
+              run: |
+                  # 检查 content-source 的 content 目录是否存在
+                  if [ -d "content-source/content" ]; then
+                      echo "✓ 发现 content-source/content 目录"
+                      
+                      # 备份现有 content 目录（如果有）
+                      if [ -d "content" ]; then
+                          echo "备份现有 content 目录 → content.bak"
+                          mv content content.bak
+                      fi
+                      
+                      # 从 ObsidianVault 复制 content 目录
+                      cp -r content-source/content .
+                      echo "✓ 从 ObsidianVault 复制 content 目录成功"
+                  else
+                      echo "⚠️ content-source/content 目录不存在，跳过内容合并"
+                      
+                      # 创建空的 content 目录（确保构建不会失败）
+                      mkdir -p content
+                  fi
 
             - name: Cache Hugo resources
               uses: actions/cache@v4
@@ -39,8 +67,11 @@ jobs:
                   hugo-version: "latest"
                   extended: true
 
+            - name: Download dependencies
+              run: hugo mod get -u
+
             - name: Build
-              run: hugo --minify --gc
+              run: hugo --minify --gc --configDir config
 
             - name: Deploy 🚀
               uses: JamesIves/github-pages-deploy-action@v4
