@@ -1,25 +1,19 @@
-# ============================================================================
-# 网站基础配置
-# ============================================================================
+# Change baseurl before deploy
 baseurl = "https://blog.961110.xyz:10010"
 languageCode = "zh-cn"
-theme = ["github.com/CaiJimmy/hugo-theme-stack/v3"]
-
 title = "积跬步行千里"
 copyright = "JasonChio"
 
-# ============================================================================
-# 语言配置
-# ============================================================================
-defaultContentLanguage = "zh-cn"  # 默认内容语言
-hasCJKLanguage = true             # CJK 语言优化（摘要/字数统计）
+# Theme i18n support
+# Available values: en, fr, id, ja, ko, pt-br, zh-cn, zh-tw, es, de, nl, it, th, el, uk, ar
+defaultContentLanguage = "zh-cn"
 
-# ============================================================================
-# 分析统计
-# ============================================================================
-services.analytics.google.id = "G-YQ9F51F77Q"
+# Set hasCJKLanguage to true if DefaultContentLanguage is in [zh-cn ja ko]
+# This will make .Summary and .WordCount behave correctly for CJK languages.
+hasCJKLanguage = true
 
-# ============================================================================
-# 分页配置
-# ============================================================================
-pagination.pagerSize = 10
+# Google Analytics (supports both UA-* and G-*)
+googleAnalytics = "G-YQ9F51F77Q"
+
+[pagination]
+pagerSize = 10
