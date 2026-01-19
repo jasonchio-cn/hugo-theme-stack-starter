@@ -1,198 +1,100 @@
 # hugo-theme-stack-starter
 
-## 🚀 功能特性
+> ⚙️ Hugo 站点配置与构建仓库 - 拉取内容、构建 Hugo、推送发布产物
 
-- ✅ **Hugo Theme Stack v3**：现代化的 Hugo 博客主题
-- ✅ **Go Modules 主题管理**：自动化的主题更新
-- ✅ **GitHub Actions CI/CD**：自动构建和部署
-- ✅ **内容分离**：来自 ObsidianVault 的 Markdown 内容
-- ✅ **自动部署**：推送到 master 分支自动触发部署
+## 简介
 
----
+这个仓库负责 Hugo 站点的配置/主题自定义，以及 GitHub Actions 构建流水线。
 
-## 📖 快速开始
+- 内容来源：`jasonchio-cn/ObsidianVault`
+- 构建工具：Hugo (extended) + Hugo Modules
+- 发布目标：将构建产物推送到 `jasonchio-cn/jasonchio-cn.github.io` 的 `main`
 
-### 1. 仓库说明
+## 三仓库架构
 
-本仓库包含：
-- `config/_default/`：Hugo 配置文件
-- `.github/workflows/`：自动化工作流（部署 + 主题更新）
-- `assets/`：自定义资源（图标、样式、脚本）
-- `static/`：静态资源文件
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1) ObsidianVault                                              │
+│    - 写作：Markdown 文章                                      │
+│    - 资源：assets/                                            │
+└──────────────────────────┬──────────────────────────────────┘
+                           │  repository_dispatch: content-update
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ 2) hugo-theme-stack-starter (本仓库)                           │
+│    - Hugo 配置 + 主题自定义                                   │
+│    - 构建 Hugo 并产出 public/                                 │
+└──────────────────────────┬──────────────────────────────────┘
+                           │  push (build output)
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ 3) jasonchio-cn.github.io                                     │
+│    - GitHub Pages 发布仓库（最终静态站点）                     │
+└─────────────────────────────────────────────────────────────┘
+```
 
-### 2. 配置 Secrets
+## 这个仓库负责什么
 
-在仓库设置中添加以下 Secrets：
+- Hugo 配置：`config/`
+- 主题与自定义资源：`assets/`、`static/`、Hugo Modules
+- CI/CD：`.github/workflows/deploy.yml`（构建并推送到发布仓库）
 
-| Secret 名称 | 说明 | 示例 |
-|------------|------|------|
-| `PAT_TOKEN` | GitHub Personal Access Token | 用于访问 ObsidianVault 私有仓库 |
+## 自动化机制
 
-**获取 PAT Token**：
-1. 访问 [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens)
-2. 创建新 token，勾选 `repo` 权限
-3. 在 [本仓库 Settings → Secrets and variables → Actions](https://github.com/jasonchio-cn/hugo-theme-stack-starter/settings/secrets/actions) 中添加
+### 触发
 
-### 3. 配置 GitHub Pages
+- `push` 到 `master`
+- `repository_dispatch`（`content-update`，通常由 ObsidianVault 触发）
 
-1. 访问 [Settings → Pages](https://github.com/jasonchio-cn/hugo-theme-stack-starter/settings/pages)
-2. 设置：
-   - **Source**: Deploy from a branch
-   - **Branch**: `gh-pages` / `root`
+### 构建与发布
 
----
+- 拉取本仓库（配置）
+- 拉取 `ObsidianVault`（内容源）到 `content-source/`
+- 合并内容：
+  - `content-source/*.md` -> `content/post/`
+  - `content-source/assets/` -> `content/assets/`
+- Hugo 构建：`hugo --minify --gc --configDir config`
+- 推送构建产物：`public/` -> `jasonchio-cn/jasonchio-cn.github.io` 的 `main`
 
-## 🛠️ 配置文件说明
+## 必要的 Secrets
 
-### 网站基础配置 (`config/_default/config.toml`)
-- `baseurl`: 网站地址
-- `languageCode`: 语言代码
-- `title`: 网站标题
-- `theme`: 主题（使用 Go Modules）
+在本仓库 `Settings -> Secrets and variables -> Actions` 配置：
 
-### 主题参数 (`config/_default/params.toml`)
-- 侧边栏、头像、社交媒体
-- 评论系统（Twikoo）
-- 小部件配置
-- 颜色主题
+- `PAT_TOKEN`
+  - 需要能读取 `ObsidianVault`，并能写入 `jasonchio-cn.github.io`
+  - 建议最简单用 classic PAT 的 `repo` 权限（或细粒度 token 给两个仓库对应权限）
 
-### 菜单配置 (`config/_default/menu.toml`)
-- 主导航菜单
-- 社交媒体链接
+## 本地开发
 
----
-
-## 🔄 工作流说明
-
-### 自动部署 (`.github/workflows/deploy.yml`)
-
-触发条件：
-- 推送到 `master` 分支
-- 创建 Pull Request
-
-流程：
-1. Checkout 配置仓库
-2. Checkout 内容仓库（ObsidianVault）
-3. 合并内容到 `content/` 目录
-4. 安装 Hugo
-5. 下载主题依赖
-6. 构建网站（`hugo --minify --gc`）
-7. 部署到 `gh-pages` 分支
-
-### 自动主题更新 (`.github/workflows/update-theme.yml`)
-
-触发条件：
-- 每天 UTC 00:00
-- 手动触发（在 Actions 页面点击 "Run workflow"）
-
-流程：
-1. 使用 `hugo mod get -u` 更新主题
-2. 使用 `hugo mod tidy` 清理依赖
-3. 提交变更
-
----
-
-## 🧪 本地开发
-
-### 环境要求
-- Git
-- Go 1.17+
-- Hugo Extended (最新版本)
-
-### 克隆仓库
 ```bash
 git clone https://github.com/jasonchio-cn/hugo-theme-stack-starter.git
 cd hugo-theme-stack-starter
+hugo server --configDir config
 ```
 
-### 运行开发服务器
-```bash
-hugo server
-```
+如果需要本地带内容预览：
 
-访问 `http://localhost:1313` 查看效果
-
-### 本地预览来自 ObsidianVault 的内容
 ```bash
-# 克隆 ObsidianVault 仓库到本地
 git clone https://github.com/jasonchio-cn/ObsidianVault.git ../ObsidianVault
-
-# 复制 content 目录
-cp -r ../ObsidianVault/content .
-
-# 启动开发服务器
-hugo server
+mkdir -p content/post content/assets
+cp -v ../ObsidianVault/*.md content/post/ || true
+cp -rv ../ObsidianVault/assets content/assets || true
+hugo server --configDir config
 ```
 
----
+## 相关仓库
 
-## 📝 内容管理
+| 仓库 | 用途 | 链接 |
+| --- | --- | --- |
+| ObsidianVault | 内容管理 | https://github.com/jasonchio-cn/ObsidianVault |
+| hugo-theme-stack-starter | Hugo 配置/构建（本仓库） | https://github.com/jasonchio-cn/hugo-theme-stack-starter |
+| jasonchio-cn.github.io | 发布仓库 | https://github.com/jasonchio-cn/jasonchio-cn.github.io |
 
-### 内容来源
+## 快速链接
 
-博客内容来自 [ObsidianVault](https://github.com/jasonchio-cn/ObsidianVault) 仓库的 `content/` 目录。
+- 博客：https://jasonchio-cn.github.io
+- Actions（构建仓库）：https://github.com/jasonchio-cn/hugo-theme-stack-starter/actions
 
-### 内容结构
+## 更新日志
 
-```
-content/
-├── post/              # 博客文章
-│   ├── hello-world/
-│   └── ...
-├── page/              # 独立页面
-│   └── about/
-└── categories/        # 分类页面
-```
-
-### 文章 Front Matter 示例
-
-```markdown
----
-title: "文章标题"
-date: 2025-01-19T00:00:00+08:00
-lastmod: 2025-01-19T00:00:00+08:00
-draft: false
-authors:
-  - JasonChio
-categories:
-  - 技术
-tags:
-  - Hugo
-  - 博客
-description: "文章描述（可选）"
-featuredImage: "/images/featured.jpg"  # 可选
----
-```
-
----
-
-## 🔧 手动更新主题
-
-```bash
-hugo mod get -u github.com/CaiJimmy/hugo-theme-stack/v4
-hugo mod tidy
-```
-
----
-
-## 📊 网站统计
-
-- [Google Analytics](https://analytics.google.com/) ID: `G-YQ9F51F77Q`
-
----
-
-## 🌐 相关链接
-
-- **博客**: https://blog.961110.xyz:10010
-- **配置仓库**: https://github.com/jasonchio-cn/hugo-theme-stack-starter
-- **内容仓库**: https://github.com/jasonchio-cn/ObsidianVault
-- **部署仓库**: https://github.com/jasonchio-cn/jasonchio-cn.github.io
-- **主题**: https://github.com/CaiJimmy/hugo-theme-stack
-
----
-
-## 📄 许可证
-
-本项目基于 [MIT License](LICENSE) 开源。
-
-主题版权归属 [CaiJimmy](https://github.com/CaiJimmy)。
+- 2026-01-19: 统一三仓库 README 风格，README 同步当前部署方式
