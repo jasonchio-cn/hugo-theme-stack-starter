@@ -1,26 +1,32 @@
-# Markdown renderer configuration
-[goldmark.renderer]
-    unsafe = true
+# ============================================================================
+# Markdown 渲染配置
+# ============================================================================
 
-[goldmark.extensions.passthrough]
-    enable = true
+[markup.goldmark.renderer]
+unsafe = true  # 允许渲染 HTML
 
-    # LaTeX math support
-    # https://gohugo.io/content-management/mathematics/
-    [goldmark.extensions.passthrough.delimiters]
-        block  = [['\[', '\]'], ['$$', '$$']]
-        inline = [['\(', '\)']]
+[markup.goldmark.extensions.passthrough]
+enable = true  # 允许 HTML 直通
 
-[tableOfContents]
-    endLevel   = 4
-    ordered    = true
-    startLevel = 2
+[markup.goldmark.extensions.passthrough.delimiters]
+block = [
+  ["\\[", "\\]"],
+  ["$$", "$$"]
+]
+inline = [
+  ["\\(", "\\)"]
+]
 
-[highlight]
-    noClasses          = false
-    codeFences         = true
-    guessSyntax        = true
-    lineNoStart        = 1
-    lineNos            = true
-    lineNumbersInTable = true
-    tabWidth           = 4
+[markup.tableOfContents]
+endLevel = 4
+ordered = true
+startLevel = 2
+
+[markup.highlight]
+noClasses = false
+codeFences = true
+guessSyntax = true
+lineNoStart = 1
+lineNos = true
+lineNumbersInTable = true
+tabWidth = 4
