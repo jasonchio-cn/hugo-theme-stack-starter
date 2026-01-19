@@ -4,6 +4,9 @@ on:
     branches:
       - main
       - master
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
   repository_dispatch:
     types: [content-update]
@@ -42,18 +45,45 @@ jobs:
 
       - name: Merge content from ObsidianVault
         run: |
+          # 创建 content 目录结构
+          mkdir -p content/post
+
+          # 检查是否存在旧的 content 目录并备份
+          if [ -d "content" ]; then
+            echo "备份现有 content 目录 → content.bak"
+            rm -rf content.bak
+            mv content content.bak
+          fi
+
+          # 重新创建 content 目录结构
+          mkdir -p content/post
+
+          # 检查 content-source/content 目录
           if [ -d "content-source/content" ]; then
             echo "✓ 发现 content-source/content 目录"
-            if [ -d "content" ]; then
-              echo "备份现有 content 目录 → content.bak"
-              mv content content.bak
-            fi
-            cp -r content-source/content .
-            echo "✓ 从 ObsidianVault 复制 content 目录成功"
-          else
-            echo "⚠️ content-source/content 目录不存在，跳过内容合并"
-            mkdir -p content
+            cp -r content-source/content/* content/ 2>/dev/null || true
           fi
+
+          # 从 ObsidianVault 根目录同步 Markdown 文件到 content/post/
+          echo "📝 从 ObsidianVault 根目录同步 Markdown 文件..."
+          find content-source -maxdepth 1 -name "*.md" -exec cp {} content/post/ \;
+
+          # 统计同步的文件数量
+          file_count=$(find content-source -maxdepth 1 -name "*.md" 2>/dev/null | wc -l)
+          echo "✓ 同步了 $file_count 个 Markdown 文件"
+
+          # 同步资源目录（如果存在）
+          if [ -d "content-source/assets" ]; then
+            echo "📁 同步 assets 目录..."
+            cp -r content-source/assets content/
+          fi
+
+          if [ -d "content-source/resources" ]; then
+            echo "📁 同步 resources 目录..."
+            cp -r content-source/resources content/
+          fi
+
+          echo "✓ 内容同步完成"
 
       - name: Setup Go
         uses: actions/setup-go@v5
