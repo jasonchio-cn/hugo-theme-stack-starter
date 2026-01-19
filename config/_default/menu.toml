@@ -29,7 +29,7 @@ name = "Bilibili"
 url = "https://space.bilibili.com/30240401"
 
 [social.params]
-icon = "video"
+icon = "link"
 
 [[social]]
 identifier = "email"
@@ -37,4 +37,4 @@ name = "Email"
 url = "mailto:zyb389120217@gmail.com"
 
 [social.params]
-icon = "email"
+icon = "messages"
