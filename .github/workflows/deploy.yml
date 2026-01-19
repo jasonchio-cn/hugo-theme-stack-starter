@@ -5,6 +5,8 @@ on:
         branches: [master]
     pull_request:
         branches: [master]
+    repository_dispatch:
+        types: [content-update]
 
 jobs:
     build:
@@ -28,25 +30,39 @@ jobs:
 
             - name: Merge content from ObsidianVault
               run: |
-                  # 检查 content-source 的 content 目录是否存在
-                  if [ -d "content-source/content" ]; then
-                      echo "✓ 发现 content-source/content 目录"
-                      
-                      # 备份现有 content 目录（如果有）
-                      if [ -d "content" ]; then
-                          echo "备份现有 content 目录 → content.bak"
-                          mv content content.bak
-                      fi
-                      
-                      # 从 ObsidianVault 复制 content 目录
-                      cp -r content-source/content .
-                      echo "✓ 从 ObsidianVault 复制 content 目录成功"
-                  else
-                      echo "⚠️ content-source/content 目录不存在，跳过内容合并"
-                      
-                      # 创建空的 content 目录（确保构建不会失败）
-                      mkdir -p content
+                  # 创建 content 目录结构
+                  mkdir -p content/post
+                  
+                  # 检查是否存在旧的 content 目录并备份
+                  if [ -d "content" ]; then
+                      echo "备份现有 content 目录 → content.bak"
+                      rm -rf content.bak
+                      mv content content.bak
                   fi
+                  
+                  # 重新创建 content 目录结构
+                  mkdir -p content/post
+                  
+                  # 从 ObsidianVault 根目录同步 Markdown 文件到 content/post/
+                  echo "📝 从 ObsidianVault 根目录同步 Markdown 文件..."
+                  find content-source -maxdepth 1 -name "*.md" -exec cp {} content/post/ \;
+                  
+                  # 统计同步的文件数量
+                  file_count=$(find content-source -maxdepth 1 -name "*.md" | wc -l)
+                  echo "✓ 同步了 $file_count 个 Markdown 文件"
+                  
+                  # 同步资源目录（如果存在）
+                  if [ -d "content-source/assets" ]; then
+                      echo "📁 同步 assets 目录..."
+                      cp -r content-source/assets content/
+                  fi
+                  
+                  if [ -d "content-source/resources" ]; then
+                      echo "📁 同步 resources 目录..."
+                      cp -r content-source/resources content/
+                  fi
+                  
+                  echo "✓ 内容同步完成"
 
             - name: Cache Hugo resources
               uses: actions/cache@v4
