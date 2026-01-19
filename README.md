@@ -2,7 +2,9 @@
 
 这是基于 [Hugo Theme Stack Starter Template](https://github.com/CaiJimmy/hugo-theme-stack-starter) 修改的个人博客配置仓库。
 
-## 📝 工作流```
+## 📝 工作流
+
+```
 ObsidianVault (内容来源)
       ↓ (CI/CD)
 hugo-theme-stack-starter (配置仓库)
@@ -196,7 +198,7 @@ hugo mod tidy
 - **博客**: https://blog.961110.xyz:10010
 - **配置仓库**: https://github.com/jasonchio-cn/hugo-theme-stack-starter
 - **内容仓库**: https://github.com/jasonchio-cn/ObsidianVault
-- ** deployed 仓库**: https://github.com/jasonchio-cn/jasonchio-cn.github.io
+- **部署仓库**: https://github.com/jasonchio-cn/jasonchio-cn.github.io
 - **主题**: https://github.com/CaiJimmy/hugo-theme-stack
 
 ---
