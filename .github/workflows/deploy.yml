@@ -5,6 +5,8 @@ on:
       - main
       - master
   workflow_dispatch:
+  repository_dispatch:
+    types: [content-update]
 permissions:
   contents: read
   pages: write
@@ -25,49 +27,81 @@ jobs:
       NODE_VERSION: 24.12.0
       TZ: Europe/Oslo
     steps:
-      - name: Checkout
+      - name: Checkout config repository
         uses: actions/checkout@v5
         with:
           submodules: recursive
           fetch-depth: 0
+
+      - name: Checkout content repository (ObsidianVault)
+        uses: actions/checkout@v4
+        with:
+          repository: jasonchio-cn/ObsidianVault
+          path: content-source
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Merge content from ObsidianVault
+        run: |
+          if [ -d "content-source/content" ]; then
+            echo "✓ 发现 content-source/content 目录"
+            if [ -d "content" ]; then
+              echo "备份现有 content 目录 → content.bak"
+              mv content content.bak
+            fi
+            cp -r content-source/content .
+            echo "✓ 从 ObsidianVault 复制 content 目录成功"
+          else
+            echo "⚠️ content-source/content 目录不存在，跳过内容合并"
+            mkdir -p content
+          fi
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
           cache: false
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+
       - name: Create directory for user-specific executable files
         run: |
           mkdir -p "${HOME}/.local"
+
       - name: Install Dart Sass
         run: |
           curl -sLJO "https://github.com/sass/dart-sass/releases/download/${DART_SASS_VERSION}/dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
           tar -C "${HOME}/.local" -xf "dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
           rm "dart-sass-${DART_SASS_VERSION}-linux-x64.tar.gz"
           echo "${HOME}/.local/dart-sass" >> "${GITHUB_PATH}"
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: 'latest'
           extended: true
+
       - name: Verify installations
         run: |
           echo "Dart Sass: $(sass --version)"
           echo "Go: $(go version)"
           echo "Hugo: $(hugo version)"
           echo "Node.js: $(node --version)"
+
       - name: Install Node.js dependencies
         run: |
           [[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true
+
       - name: Configure Git
         run: |
           git config core.quotepath false
+
       - name: Cache restore
         id: cache-restore
         uses: actions/cache/restore@v4
@@ -76,6 +110,7 @@ jobs:
           key: hugo-${{ github.run_id }}
           restore-keys:
             hugo-
+
       - name: Build the site
         run: |
           hugo \
@@ -83,16 +118,19 @@ jobs:
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/" \
             --cacheDir "${{ runner.temp }}/hugo_cache"
+
       - name: Cache save
         id: cache-save
         uses: actions/cache/save@v4
         with:
           path: ${{ runner.temp }}/hugo_cache
           key: ${{ steps.cache-restore.outputs.cache-primary-key }}
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
+
   deploy:
     environment:
       name: github-pages
