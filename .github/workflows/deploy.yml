@@ -96,3 +96,23 @@ jobs:
                   clean-exclude: |
                       README.md
                   single-commit: true
+
+            - name: Install rsync
+              if: github.event_name != 'pull_request'
+              run: sudo apt-get update && sudo apt-get install -y rsync
+
+            - name: Configure SSH
+              if: github.event_name != 'pull_request'
+              run: |
+                  mkdir -p ~/.ssh
+                  echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+                  chmod 600 ~/.ssh/id_ed25519
+                  ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+            - name: Deploy to Remote Server (rsync)
+              if: github.event_name != 'pull_request'
+              run: |
+                  rsync -az --delete \
+                      -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
+                      public/ \
+                      ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_DIR }}/
