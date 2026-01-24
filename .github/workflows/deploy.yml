@@ -112,7 +112,7 @@ jobs:
             - name: Deploy to Remote Server (rsync)
               if: github.event_name != 'pull_request'
               run: |
-                  rsync -az --delete \
+                  rsync -rz --delete \
                       -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
                       public/ \
                       ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_DIR }}/
