@@ -15,5 +15,10 @@ hasCJKLanguage = true
 # Google Analytics (supports both UA-* and G-*)
 googleAnalytics = "G-YQ9F51F77Q"
 
+[taxonomies]
+category = "categories"
+tag = "tags"
+series = "series"
+
 [pagination]
 pagerSize = 10

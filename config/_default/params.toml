@@ -33,8 +33,10 @@ avatar = "https://image.961110.xyz:10010/i/2025/03/avatar-自定义-1.webp"
 math = true
 toc = true
 readingTime = true
-license.enabled = true
-license.default = "Licensed under CC BY-NC-SA 4.0"
+
+[article.license]
+enabled = true
+default = "Licensed under CC BY-NC-SA 4.0"
 
 # 评论配置
 [comments]
@@ -51,15 +53,18 @@ type = "search"
 
 [[widgets.homepage]]
 type = "archives"
-params = { limit = 5 }
+[widgets.homepage.params]
+limit = 5
 
 [[widgets.homepage]]
 type = "categories"
-params = { limit = 10 }
+[widgets.homepage.params]
+limit = 10
 
 [[widgets.homepage]]
 type = "tag-cloud"
-params = { limit = 10 }
+[widgets.homepage.params]
+limit = 10
 
 [[widgets.page]]
 type = "toc"
@@ -83,5 +88,6 @@ default = "auto"
 # 图片处理
 [imageProcessing.cover]
 enabled = true
+
 [imageProcessing.content]
 enabled = true
