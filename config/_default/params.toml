@@ -26,11 +26,7 @@ lastUpdated = "2006-01-02 15:04:05"
 [sidebar]
 emoji = "🍥"
 subtitle = "JasonChio"
-
-[sidebar.avatar]
-enabled = true
-local = false
-src = "https://image.961110.xyz:10010/i/2025/03/avatar-自定义-1.webp"
+avatar = "https://image.961110.xyz:10010/i/2025/03/avatar-自定义-1.webp"
 
 # 文章配置
 [article]
