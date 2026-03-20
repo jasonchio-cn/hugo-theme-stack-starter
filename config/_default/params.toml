@@ -12,6 +12,9 @@ rssFullContent = true
 # Favicon（留空使用默认）
 favicon = ""
 
+# 排序
+SortBy = "default"
+
 # 页脚配置
 [footer]
 since = 2020
@@ -30,13 +33,24 @@ avatar = "https://image.961110.xyz:10010/i/2025/03/avatar-自定义-1.webp"
 
 # 文章配置
 [article]
+headingAnchor = false
 math = true
-toc = true
 readingTime = true
+toc = true
 
 [article.license]
 enabled = true
 default = "Licensed under CC BY-NC-SA 4.0"
+
+# 小部件配置
+[widgets]
+homepage = [
+    { type = "search" },
+    { type = "archives", params = { limit = 5 } },
+    { type = "categories", params = { limit = 10 } },
+    { type = "tag-cloud", params = { limit = 10 } },
+]
+page = [{ type = "toc" }]
 
 # 评论配置
 [comments]
@@ -46,28 +60,6 @@ provider = "twikoo"
 [comments.twikoo]
 envId = "https://comment.961110.xyz:10010"
 lang = "zh-CN"
-
-# 小部件配置
-[[widgets.homepage]]
-type = "search"
-
-[[widgets.homepage]]
-type = "archives"
-[widgets.homepage.params]
-limit = 5
-
-[[widgets.homepage]]
-type = "categories"
-[widgets.homepage.params]
-limit = 10
-
-[[widgets.homepage]]
-type = "tag-cloud"
-[widgets.homepage.params]
-limit = 10
-
-[[widgets.page]]
-type = "toc"
 
 # OpenGraph 社交分享配置
 [opengraph.twitter]
